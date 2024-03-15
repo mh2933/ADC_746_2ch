@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="texts.xsd" Version="4.23.1">
+  <Languages>
+    <Language Id="GB" />
+  </Languages>
+  <Texts>
+    <TextGroup Id="Group1" />
+    <TextGroup Id="Unsorted">
+      <Text Id="__SingleUse_ST66" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">&lt;&gt; %</Translation>
+      </Text>
+      <Text Id="__SingleUse_D78A" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">000000</Translation>
+      </Text>
+      <Text Id="__SingleUse_CM21" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">0000 A</Translation>
+      </Text>
+      <Text Id="__SingleUse_J30X" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">0000</Translation>
+      </Text>
+      <Text Id="__SingleUse_D6U5" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Ah=&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_A8E9" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Current=&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_OR6I" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Voltage=&lt;value&gt; V</Translation>
+      </Text>
+    </TextGroup>
+  </Texts>
+  <Typographies>
+    <Typography Id="Default" Font="verdana.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WidgetWildcardCharacters="0123456789." WildcardCharacterRanges="0x20-0x4e20" />
+    <Typography Id="Large" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="Small" Font="verdana.ttf" Size="10" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+  </Typographies>
+</TextDatabase>
