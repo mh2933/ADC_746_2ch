@@ -1,6 +1,7 @@
 #include <gui/model/Model.hpp>
 #include <gui/model/ModelListener.hpp>
 #include <cstdio>
+#include <chrono>
 
 #ifndef SIMULATOR
 #include "main.h"
@@ -23,6 +24,12 @@ extern "C"
 Model::Model() : modelListener(0), Voltage (300), Current (60), mAh (10000), tickCounter (100), seconds (100)
 {
 	//mAh = tickCounter * 100; // Initialize Ah here after tickCounter is set
+	startTime = std::chrono::high_resolution_clock::now();
+}
+
+void Model::someFunction() {
+    int someVariable = 123;
+    printf("Debug: someVariable = %d\n", someVariable);
 }
 
 void Model::tick()
@@ -31,6 +38,15 @@ void Model::tick()
 //	static int elapsedSeconds = 0;
 //
 //    elapsedSeconds++;
+
+	someFunction();
+
+    // Calculate the elapsed time since startTime
+    auto now = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - startTime);
+
+    // Update seconds based on elapsed time
+    seconds = elapsed.count()/1000;
 
 	printf("Current: ");
 

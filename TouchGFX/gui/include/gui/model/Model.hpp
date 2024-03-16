@@ -1,6 +1,8 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include <chrono>
+
 class ModelListener;
 
 class Model
@@ -17,6 +19,7 @@ public:
     void tick();
 protected:
     ModelListener* modelListener;
+	void someFunction();
     int Voltage;
     float Current;
     float mAh;
@@ -25,6 +28,7 @@ protected:
     //volatile int seconds;
     //volatile int minutes;
     //volatile float elapsedSeconds;
+    std::chrono::high_resolution_clock::time_point startTime;
 
 };
 
