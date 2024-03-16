@@ -247,14 +247,14 @@ int main(void)
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  printf("hello1");
+  printf("hello1 outside while in main.c");
 
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  printf("hello2");
+	  printf("hello while in main.c");
   }
   /* USER CODE END 3 */
 }
