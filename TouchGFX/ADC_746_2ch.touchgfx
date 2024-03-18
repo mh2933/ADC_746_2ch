@@ -7,7 +7,6 @@
           {
             "Type": "ScalableImage",
             "Name": "scalableImage1",
-            "Y": 1,
             "Width": 480,
             "Height": 272,
             "Filename": "__generated\\alternate_theme_images_backgrounds_480x272_poly.png",
@@ -16,9 +15,9 @@
           {
             "Type": "TextArea",
             "Name": "textArea1",
-            "X": 43,
-            "Y": 63,
-            "Width": 163,
+            "X": 50,
+            "Y": 81,
+            "Width": 170,
             "Height": 24,
             "TextId": "__SingleUse_OR6I",
             "TextRotation": "0",
@@ -37,9 +36,9 @@
           {
             "Type": "TextArea",
             "Name": "textArea2",
-            "X": 43,
-            "Y": 112,
-            "Width": 167,
+            "X": 46,
+            "Y": 124,
+            "Width": 194,
             "Height": 24,
             "TextId": "__SingleUse_A8E9",
             "TextRotation": "0",
@@ -52,15 +51,15 @@
             "Wildcard1": {
               "TextId": "__SingleUse_CM21",
               "UseBuffer": true,
-              "BufferSize": 5
+              "BufferSize": 6
             }
           },
           {
             "Type": "TextArea",
             "Name": "textArea3",
-            "X": 43,
-            "Y": 166,
-            "Width": 121,
+            "X": 77,
+            "Y": 168,
+            "Width": 147,
             "Height": 24,
             "TextId": "__SingleUse_D6U5",
             "TextRotation": "0",
@@ -79,7 +78,7 @@
           {
             "Type": "TextProgress",
             "Name": "textProgress1",
-            "X": 261,
+            "X": 264,
             "Y": 112,
             "Width": 175,
             "Height": 50,

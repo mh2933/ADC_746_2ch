@@ -13,11 +13,11 @@ Screen1ViewBase::Screen1ViewBase()
     add(__background);
 
     scalableImage1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_BACKGROUNDS_480X272_POLY_ID));
-    scalableImage1.setPosition(0, 1, 480, 272);
+    scalableImage1.setPosition(0, 0, 480, 272);
     scalableImage1.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(scalableImage1);
 
-    textArea1.setXY(43, 63);
+    textArea1.setXY(50, 81);
     textArea1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea1.setLinespacing(0);
     Unicode::snprintf(textArea1Buffer, TEXTAREA1_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_J30X).getText());
@@ -26,7 +26,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_OR6I));
     add(textArea1);
 
-    textArea2.setXY(43, 112);
+    textArea2.setXY(46, 124);
     textArea2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea2.setLinespacing(0);
     Unicode::snprintf(textArea2Buffer, TEXTAREA2_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_CM21).getText());
@@ -35,7 +35,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_A8E9));
     add(textArea2);
 
-    textArea3.setXY(43, 166);
+    textArea3.setXY(77, 168);
     textArea3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea3.setLinespacing(0);
     Unicode::snprintf(textArea3Buffer, TEXTAREA3_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_D78A).getText());
@@ -44,7 +44,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_D6U5));
     add(textArea3);
 
-    textProgress1.setXY(261, 112);
+    textProgress1.setXY(264, 112);
     textProgress1.setProgressIndicatorPosition(12, 10, 150, 30);
     textProgress1.setRange(0, 100);
     textProgress1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));

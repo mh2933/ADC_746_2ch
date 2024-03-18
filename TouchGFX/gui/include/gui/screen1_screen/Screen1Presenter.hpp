@@ -27,7 +27,7 @@ public:
 
     virtual ~Screen1Presenter() {};
 
-    virtual void setADC1 (int val);
+    virtual void setADC1 (float val);
 
     virtual void setADC2 (float val);
 
