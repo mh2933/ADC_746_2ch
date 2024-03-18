@@ -1,4 +1,3 @@
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:17:10:long int map(long int, long int, long int, long int, long int)	12	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:24:1:Model::Model()	16	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:30:6:void Model::someFunction()	0	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:35:6:void Model::tick()	56	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:18:10:long int map(long int, long int, long int, long int, long int)	12	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:25:1:Model::Model()	12	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:33:6:void Model::tick()	64	static

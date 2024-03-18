@@ -15,9 +15,9 @@ void Screen1View::tearDownScreen()
     Screen1ViewBase::tearDownScreen();
 }
 
-void Screen1View::setADC1 (int val)
+void Screen1View::setADC1 (float val)
 {
-	 Unicode::snprintf(textArea1Buffer, TEXTAREA1_SIZE, "%d", val);
+	 Unicode::snprintfFloat(textArea1Buffer, TEXTAREA1_SIZE, "%.2f", val);
 	 textArea1.invalidate();
 }
 

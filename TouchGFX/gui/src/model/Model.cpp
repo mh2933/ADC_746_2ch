@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <chrono>
 
+
 #ifndef SIMULATOR
 #include "main.h"
 
@@ -21,45 +22,34 @@ extern "C"
 }
 #endif
 
-Model::Model() : modelListener(0), Voltage (300), Current (60), mAh (10000), tickCounter (100), seconds (100)
+Model::Model() : modelListener(0), Voltage (10.0), Current (60), mAh (10000), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0)
 {
 	//mAh = tickCounter * 100; // Initialize Ah here after tickCounter is set
-	startTime = std::chrono::high_resolution_clock::now();
+	//startTime = std::chrono::system_clock::now();
+
 }
 
-void Model::someFunction() {
-    int someVariable = 123;
-    printf("Debug: someVariable = %d\n", someVariable);
-}
 
 void Model::tick()
 {
 #ifndef SIMULATOR
-//	static int elapsedSeconds = 0;
-//
-//    elapsedSeconds++;
 
-	someFunction();
+	//milli_seconds = 0;
+    seconds = 0;
 
-    // Calculate the elapsed time since startTime
-    auto now = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - startTime);
 
-    // Update seconds based on elapsed time
-    seconds = elapsed.count()/1000;
 
-	printf("Current: ");
 
-    if (tickCounter > 0)
-    {
-        tickCounter--;
-        HAL_Delay(1000); // Delay for 1 second
-        seconds++; // Increment seconds
-    }
-    else
-    {
-        tickCounter = 100;
-    }
+//    if (tickCounter > 0)
+//    {
+//        tickCounter--;
+////        HAL_Delay(100);  // Delay for 100 ms
+////        milli_seconds++; // Increment seconds
+//    }
+//    else
+//    {
+//        tickCounter = 100;
+//    }
 
 
     ADC_ChannelConfTypeDef sConfig = {0};
@@ -103,27 +93,60 @@ void Model::tick()
         //Current = map(value_2, 0, 4095, 0, 100);
     }
 
-    if (adc_count > 0)
+//    if (HAL_Delay(100))
+//    {
+//         milli_seconds++;
+//    }
+
+	HAL_Delay(10);
+	milli_seconds++; // Increment seconds
+	//count_milli_seconds += milli_seconds;
+
+    printf("before if statement milli_seconds: %ld\n ", milli_seconds);
+
+    if (milli_seconds >= 1)  // 1 = 10 milliseconds
     {
-        Voltage = map(static_cast<float>(adc_sum_1) / adc_count, 0, 4095, 0, 100);
-        Current = map(static_cast<float>(adc_sum_2) / adc_count, 0, 2046, -20, 5);
 
-        // Calculate mAh consumed per second
-        float mAhConsumedPerSecond = (Current * seconds) / 3600;
+    	printf("start of if statement milli_seconds: %ld\n ", milli_seconds);
+    	//counting_milliseconds = 0;
+    	printf("start of if statement\n");
+    	seconds = 0.1;
 
-        // Subtract the mAh consumed in the last second from the total mAh
-        mAh += mAhConsumedPerSecond;
-        printf("Current: %d\n", Current);
-        printf("seconds: %d\n", seconds);
-        printf("mAh: %f\n", mAh);
+    	printf("seconds: %f\n", seconds);
+    	//printf("counting_milliseconds %ld\n", counting_milliseconds);
 
-        // Ensure mAh does not go below 0
-        if (mAh < 0)
+        if (adc_count > 0)
         {
-            mAh = 0;
+            Voltage = map(static_cast<float>(adc_sum_1) / adc_count, 0, 4095, 0, 100);
+            Current = map(static_cast<float>(adc_sum_2) / adc_count, 0, 2046, -20, 5);
+
+            // Calculate mAh consumed per second
+            float mAhConsumedPerSecond = (Current * seconds) / 3.6;
+            printf("mAhConsumedPerSecond: %f\n", mAhConsumedPerSecond);
+
+            // Subtract the mAh consumed in the last second from the total mAh
+            mAh += mAhConsumedPerSecond; // divide by 10 to make the LCD and printf function to match
+            printf("Current: %f\n", Current);
+
+            printf("mAh: %f\n", mAh);
+
+
+            seconds = 0;
+            milli_seconds = 0;
+
+            // Ensure mAh does not go below 0
+            if (mAh < 0)
+            {
+                mAh = 0;
+            }
         }
     }
-//    mAh = tickCounter * 100;
+
+
+    tickCounter = map(mAh, 10000, 0, 100, 0);
+
+    printf("after if statement\n");
+    printf("seconds: %d \n", seconds);
 
 #endif
 

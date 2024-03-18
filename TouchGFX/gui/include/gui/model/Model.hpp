@@ -19,15 +19,20 @@ public:
     void tick();
 protected:
     ModelListener* modelListener;
-	void someFunction();
-    int Voltage;
+
+    float Voltage;
     float Current;
     float mAh;
     volatile int tickCounter;
-    int seconds;
-    //volatile int seconds;
-    //volatile int minutes;
-    //volatile float elapsedSeconds;
+    volatile long int milli_seconds;
+    float seconds;
+    volatile int tickCounterNow;
+    long count_milli_seconds;
+
+
+    //volatile long int counting_milliseconds;
+
+
     std::chrono::high_resolution_clock::time_point startTime;
 
 };

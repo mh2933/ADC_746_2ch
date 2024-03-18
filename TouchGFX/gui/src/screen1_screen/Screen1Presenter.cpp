@@ -17,7 +17,7 @@ void Screen1Presenter::deactivate()
 
 }
 
-void Screen1Presenter::setADC1 (int val)
+void Screen1Presenter::setADC1 (float val)
 {
 	view.setADC1 (val);
 }
