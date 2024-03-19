@@ -13,10 +13,10 @@
         <Translation Language="GB">000000</Translation>
       </Text>
       <Text Id="__SingleUse_CM21" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">00000 </Translation>
+        <Translation Language="GB">0000000</Translation>
       </Text>
       <Text Id="__SingleUse_J30X" Alignment="Left" TypographyId="Default">
-        <Translation Language="GB">0000</Translation>
+        <Translation Language="GB">0000000</Translation>
       </Text>
       <Text Id="__SingleUse_D6U5" Alignment="Left" TypographyId="Default">
         <Translation Language="GB">mAh= &lt;value&gt;</Translation>

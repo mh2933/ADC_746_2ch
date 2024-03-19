@@ -29,18 +29,18 @@ protected:
      */
     touchgfx::Box __background;
     touchgfx::ScalableImage scalableImage1;
-    touchgfx::TextAreaWithOneWildcard textArea1;
-    touchgfx::TextAreaWithOneWildcard textArea2;
+    touchgfx::TextAreaWithOneWildcard textArea1voltage;
+    touchgfx::TextAreaWithOneWildcard textArea2current;
     touchgfx::TextAreaWithOneWildcard textArea3;
     touchgfx::TextProgress textProgress1;
 
     /*
      * Wildcard Buffers
      */
-    static const uint16_t TEXTAREA1_SIZE = 5;
-    touchgfx::Unicode::UnicodeChar textArea1Buffer[TEXTAREA1_SIZE];
-    static const uint16_t TEXTAREA2_SIZE = 6;
-    touchgfx::Unicode::UnicodeChar textArea2Buffer[TEXTAREA2_SIZE];
+    static const uint16_t TEXTAREA1VOLTAGE_SIZE = 8;
+    touchgfx::Unicode::UnicodeChar textArea1voltageBuffer[TEXTAREA1VOLTAGE_SIZE];
+    static const uint16_t TEXTAREA2CURRENT_SIZE = 8;
+    touchgfx::Unicode::UnicodeChar textArea2currentBuffer[TEXTAREA2CURRENT_SIZE];
     static const uint16_t TEXTAREA3_SIZE = 7;
     touchgfx::Unicode::UnicodeChar textArea3Buffer[TEXTAREA3_SIZE];
 

@@ -15,16 +15,16 @@ void Screen1View::tearDownScreen()
     Screen1ViewBase::tearDownScreen();
 }
 
-void Screen1View::setADC1 (float val)
+void Screen1View::setADC1voltage (float val)
 {
-	 Unicode::snprintfFloat(textArea1Buffer, TEXTAREA1_SIZE, "%.2f", val);
-	 textArea1.invalidate();
+	 Unicode::snprintfFloat(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%.2f", val);
+	 textArea1voltage.invalidate();
 }
 
-void Screen1View::setADC2 (float val)
+void Screen1View::setADC2current (float val)
 {
-	 Unicode::snprintfFloat(textArea2Buffer, TEXTAREA2_SIZE, "%.2f", val);
-	 textArea2.invalidate();
+	 Unicode::snprintfFloat(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%.2f", val);
+	 textArea2current.invalidate();
 }
 
 void Screen1View::setAh (float val)
