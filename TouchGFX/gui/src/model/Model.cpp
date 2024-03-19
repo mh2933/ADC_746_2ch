@@ -2,6 +2,7 @@
 #include <gui/model/ModelListener.hpp>
 #include <cstdio>
 #include <chrono>
+#include <cstdint>
 
 
 #ifndef SIMULATOR
@@ -15,7 +16,7 @@ extern "C"
 
     int _write(int file, char *ptr, int len);
 
-    long map(long x, long in_min, long in_max, long out_min, long out_max)
+    float map(float x, float in_min, float in_max, float out_min, float out_max)
     {
       return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
     }
@@ -24,8 +25,6 @@ extern "C"
 
 Model::Model() : modelListener(0), Voltage (10.5), Current (6.5), mAh (10000), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0)
 {
-	//mAh = tickCounter * 100; // Initialize Ah here after tickCounter is set
-	//startTime = std::chrono::system_clock::now();
 
 }
 
@@ -34,28 +33,12 @@ void Model::tick()
 {
 #ifndef SIMULATOR
 
-	//milli_seconds = 0;
-    seconds = 0;
-
-
-
-
-//    if (tickCounter > 0)
-//    {
-//        tickCounter--;
-////        HAL_Delay(100);  // Delay for 100 ms
-////        milli_seconds++; // Increment seconds
-//    }
-//    else
-//    {
-//        tickCounter = 100;
-//    }
-
+    //seconds = 0;
 
     ADC_ChannelConfTypeDef sConfig = {0};
-    uint32_t adc_sum_1 = 0;
-    uint32_t adc_sum_2 = 0;
-    uint16_t adc_count = 0;
+    float adc_sum_1 = 0;
+    float adc_sum_2 = 0;
+    float adc_count = 0;
 
     for (uint16_t i = 0; i < 1000; i++)
     {
@@ -70,12 +53,17 @@ void Model::tick()
 
         HAL_ADC_Start(&hadc3);
         HAL_ADC_PollForConversion(&hadc3, 10);
-        uint16_t value_1 = HAL_ADC_GetValue(&hadc3);
+        float value_1 = HAL_ADC_GetValue(&hadc3);
         HAL_ADC_Stop(&hadc3);
         adc_sum_1 += value_1;
         adc_count++;
 
-        //Voltage = map(value_1, 0, 4095, 0, 100);
+//        printf("printing adc_sum_1: %.2f\n", adc_sum_1);
+//        printf("printing value_1:   %.2f\n", value_1);
+//        printf("printing adc_count: %.2f\n\n", adc_count);
+//        HAL_Delay(1000);
+
+        //printf("value_1: %.2d\n", value_1);
 
         // Configure for channel 8
         sConfig.Channel = ADC_CHANNEL_8;
@@ -90,13 +78,8 @@ void Model::tick()
         HAL_ADC_Stop(&hadc3);
         adc_sum_2 += value_2;
 
-        //Current = map(value_2, 0, 4095, 0, 100);
     }
 
-//    if (HAL_Delay(100))
-//    {
-//         milli_seconds++;
-//    }
 
 	HAL_Delay(10);
 	milli_seconds++; // Increment seconds
@@ -117,8 +100,22 @@ void Model::tick()
 
         if (adc_count > 0)
         {
-            Voltage = map(static_cast<float>(adc_sum_1) / adc_count, 0, 4095, 0.0, 100.0);
-            Current = map(static_cast<float>(adc_sum_2) / adc_count, 0, 2046, -20.0, 5.0);
+//        	float r1 = 18;
+//        	float r2 = 1.2;
+            float voltage_divider = 16.0; // 1/(r2/(r1+r2))
+            printf("voltage_divider: %.2f\n", voltage_divider);
+
+            float v_per_ampere = 0.0264;
+            float Vcc = 3.3;
+            float adc2_average = adc_sum_2 / adc_count;
+
+            float calculated_volt = adc2_average * (Vcc / 4095.0);
+            float calculated_voltage_to_current = calculated_volt / v_per_ampere;
+
+            Voltage = map((adc_sum_1 / adc_count), 0, 4095, 0.0, 50.0);
+            Current = map(calculated_voltage_to_current, 0, 50, -50.0, 50.0);
+            printf("printing Voltage after mapfunction2: %.2f\n", Voltage);
+
 
             // Calculate mAh consumed per second
             float mAhConsumedPerSecond = (Current * seconds) / 3.6;
@@ -130,25 +127,27 @@ void Model::tick()
 
             printf("mAh: %.3f\n", mAh);
 
+            printf("adc_count: %.3f\n", adc_count);
 
             seconds = 0;
             milli_seconds = 0;
 
-            // Ensure mAh does not go below 0
-            if (mAh < 0)
-            {
-                mAh = 0;
-            }
+            // Ensure mAh does not go below 0 and abow 10000
+            if (mAh < 0) mAh = 0;
+            if (mAh > 10000) mAh = 10000;
+
+            adc_count = 0;
         }
     }
+    printf("adc_count: %.3f\n", adc_count);
 
-
-    tickCounter = map(mAh, 10100, 0, 100, 0);
+    tickCounter = map(mAh, 10005, 0, 100, 0);
 
     printf("after if statement\n");
     printf("seconds: %.2f \n", seconds);
     printf("size of Voltage: %zu\n", sizeof(Voltage));
     printf("Voltage: %.2f\n", Voltage);
+
 
 #endif
 
