@@ -22,7 +22,7 @@ extern "C"
 }
 #endif
 
-Model::Model() : modelListener(0), Voltage (10.0), Current (60), mAh (10000), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0)
+Model::Model() : modelListener(0), Voltage (10.5), Current (6.5), mAh (10000), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0)
 {
 	//mAh = tickCounter * 100; // Initialize Ah here after tickCounter is set
 	//startTime = std::chrono::system_clock::now();
@@ -117,8 +117,8 @@ void Model::tick()
 
         if (adc_count > 0)
         {
-            Voltage = map(static_cast<float>(adc_sum_1) / adc_count, 0, 4095, 0, 100);
-            Current = map(static_cast<float>(adc_sum_2) / adc_count, 0, 2046, -20, 5);
+            Voltage = map(static_cast<float>(adc_sum_1) / adc_count, 0, 4095, 0.0, 100.0);
+            Current = map(static_cast<float>(adc_sum_2) / adc_count, 0, 2046, -20.0, 5.0);
 
             // Calculate mAh consumed per second
             float mAhConsumedPerSecond = (Current * seconds) / 3.6;
@@ -126,9 +126,9 @@ void Model::tick()
 
             // Subtract the mAh consumed in the last second from the total mAh
             mAh += mAhConsumedPerSecond; // divide by 10 to make the LCD and printf function to match
-            printf("Current: %f\n", Current);
+            printf("Current: %.2f\n", Current);
 
-            printf("mAh: %f\n", mAh);
+            printf("mAh: %.3f\n", mAh);
 
 
             seconds = 0;
@@ -143,15 +143,17 @@ void Model::tick()
     }
 
 
-    tickCounter = map(mAh, 10000, 0, 100, 0);
+    tickCounter = map(mAh, 10100, 0, 100, 0);
 
     printf("after if statement\n");
-    printf("seconds: %d \n", seconds);
+    printf("seconds: %.2f \n", seconds);
+    printf("size of Voltage: %zu\n", sizeof(Voltage));
+    printf("Voltage: %.2f\n", Voltage);
 
 #endif
 
-    modelListener->setADC1(Voltage);
-    modelListener->setADC2(Current);
+    modelListener->setADC1voltage(Voltage);
+    modelListener->setADC2current(Current);
     modelListener->setAh(mAh);
     modelListener->tickCounterUpdated(tickCounter);
 }

@@ -17,14 +17,14 @@ void Screen1Presenter::deactivate()
 
 }
 
-void Screen1Presenter::setADC1 (float val)
+void Screen1Presenter::setADC1voltage (float val)
 {
-	view.setADC1 (val);
+	view.setADC1voltage (val);
 }
 
-void Screen1Presenter::setADC2 (float val)
+void Screen1Presenter::setADC2current (float val)
 {
-	view.setADC2 (val);
+	view.setADC2current (val);
 }
 
 void Screen1Presenter::setAh (float val)

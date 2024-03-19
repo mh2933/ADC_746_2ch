@@ -14,10 +14,10 @@
           },
           {
             "Type": "TextArea",
-            "Name": "textArea1",
+            "Name": "textArea1voltage",
             "X": 50,
             "Y": 81,
-            "Width": 170,
+            "Width": 209,
             "Height": 24,
             "TextId": "__SingleUse_OR6I",
             "TextRotation": "0",
@@ -30,15 +30,15 @@
             "Wildcard1": {
               "TextId": "__SingleUse_J30X",
               "UseBuffer": true,
-              "BufferSize": 5
+              "BufferSize": 8
             }
           },
           {
             "Type": "TextArea",
-            "Name": "textArea2",
+            "Name": "textArea2current",
             "X": 46,
             "Y": 124,
-            "Width": 194,
+            "Width": 213,
             "Height": 24,
             "TextId": "__SingleUse_A8E9",
             "TextRotation": "0",
@@ -51,7 +51,7 @@
             "Wildcard1": {
               "TextId": "__SingleUse_CM21",
               "UseBuffer": true,
-              "BufferSize": 6
+              "BufferSize": 8
             }
           },
           {

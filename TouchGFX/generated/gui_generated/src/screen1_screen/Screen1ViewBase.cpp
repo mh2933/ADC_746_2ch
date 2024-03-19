@@ -17,23 +17,23 @@ Screen1ViewBase::Screen1ViewBase()
     scalableImage1.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(scalableImage1);
 
-    textArea1.setXY(50, 81);
-    textArea1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    textArea1.setLinespacing(0);
-    Unicode::snprintf(textArea1Buffer, TEXTAREA1_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_J30X).getText());
-    textArea1.setWildcard(textArea1Buffer);
-    textArea1.resizeToCurrentText();
-    textArea1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_OR6I));
-    add(textArea1);
+    textArea1voltage.setXY(50, 81);
+    textArea1voltage.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    textArea1voltage.setLinespacing(0);
+    Unicode::snprintf(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_J30X).getText());
+    textArea1voltage.setWildcard(textArea1voltageBuffer);
+    textArea1voltage.resizeToCurrentText();
+    textArea1voltage.setTypedText(touchgfx::TypedText(T___SINGLEUSE_OR6I));
+    add(textArea1voltage);
 
-    textArea2.setXY(46, 124);
-    textArea2.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
-    textArea2.setLinespacing(0);
-    Unicode::snprintf(textArea2Buffer, TEXTAREA2_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_CM21).getText());
-    textArea2.setWildcard(textArea2Buffer);
-    textArea2.resizeToCurrentText();
-    textArea2.setTypedText(touchgfx::TypedText(T___SINGLEUSE_A8E9));
-    add(textArea2);
+    textArea2current.setXY(46, 124);
+    textArea2current.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    textArea2current.setLinespacing(0);
+    Unicode::snprintf(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_CM21).getText());
+    textArea2current.setWildcard(textArea2currentBuffer);
+    textArea2current.resizeToCurrentText();
+    textArea2current.setTypedText(touchgfx::TypedText(T___SINGLEUSE_A8E9));
+    add(textArea2current);
 
     textArea3.setXY(77, 168);
     textArea3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
