@@ -52,7 +52,7 @@ void Model::tick()
         }
 
         HAL_ADC_Start(&hadc3);
-        HAL_ADC_PollForConversion(&hadc3, 10);
+        HAL_ADC_PollForConversion(&hadc3, 5);
         float value_1 = HAL_ADC_GetValue(&hadc3);
         HAL_ADC_Stop(&hadc3);
         adc_sum_1 += value_1;
@@ -73,7 +73,7 @@ void Model::tick()
         }
 
         HAL_ADC_Start(&hadc3);
-        HAL_ADC_PollForConversion(&hadc3, 10);
+        HAL_ADC_PollForConversion(&hadc3, 5);
         uint16_t value_2 = HAL_ADC_GetValue(&hadc3);
         HAL_ADC_Stop(&hadc3);
         adc_sum_2 += value_2;
@@ -103,17 +103,21 @@ void Model::tick()
 //        	float r1 = 18;
 //        	float r2 = 1.2;
             float voltage_divider = 16.0; // 1/(r2/(r1+r2))
+            float adc1_average = adc_sum_1 / adc_count;
             printf("voltage_divider: %.2f\n", voltage_divider);
 
-            float v_per_ampere = 0.0264;
+            float v_per_ampere = 0.025;
             float Vcc = 3.3;
             float adc2_average = adc_sum_2 / adc_count;
+            float midpoint_val = 1.6639;
 
             float calculated_volt = adc2_average * (Vcc / 4095.0);
-            float calculated_voltage_to_current = calculated_volt / v_per_ampere;
+            printf("calculated_volt: %.5f\n\n", calculated_volt);
+            float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
+            printf("calculated_voltage_to_current: %.5f\n\n", calculated_voltage_to_current);
 
-            Voltage = map((adc_sum_1 / adc_count), 0, 4095, 0.0, 50.0);
-            Current = map(calculated_voltage_to_current, 0, 50, -50.0, 50.0);
+            Voltage = map(adc1_average, 0, 4095, 0.0, 50.0);
+            Current = map(calculated_voltage_to_current, -50.0, 50.0, -50.0, 50.0);
             printf("printing Voltage after mapfunction2: %.2f\n", Voltage);
 
 
