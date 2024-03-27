@@ -6,6 +6,9 @@
   <Texts>
     <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
+      <Text Id="__SingleUse_WO7L" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">Battery Capacity</Translation>
+      </Text>
       <Text Id="__SingleUse_ST66" Alignment="Center" TypographyId="Default">
         <Translation Language="GB">&lt;&gt; %</Translation>
       </Text>

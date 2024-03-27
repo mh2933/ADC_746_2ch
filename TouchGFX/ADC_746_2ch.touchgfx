@@ -15,8 +15,8 @@
           {
             "Type": "TextArea",
             "Name": "textArea1voltage",
-            "X": 50,
-            "Y": 81,
+            "X": 16,
+            "Y": 23,
             "Width": 209,
             "Height": 24,
             "TextId": "__SingleUse_OR6I",
@@ -36,8 +36,8 @@
           {
             "Type": "TextArea",
             "Name": "textArea2current",
-            "X": 46,
-            "Y": 124,
+            "X": 12,
+            "Y": 62,
             "Width": 213,
             "Height": 24,
             "TextId": "__SingleUse_A8E9",
@@ -57,8 +57,8 @@
           {
             "Type": "TextArea",
             "Name": "textArea3",
-            "X": 77,
-            "Y": 168,
+            "X": 45,
+            "Y": 99,
             "Width": 147,
             "Height": 24,
             "TextId": "__SingleUse_D6U5",
@@ -78,24 +78,70 @@
           {
             "Type": "TextProgress",
             "Name": "textProgress1",
-            "X": 264,
-            "Y": 112,
+            "X": 33,
+            "Y": 176,
             "Width": 175,
             "Height": 50,
             "TextId": "__SingleUse_ST66",
             "Color": {
               "Red": 255,
-              "Green": 255,
-              "Blue": 255
+              "Green": 187
             },
-            "Preset": "alternate_theme\\presets\\textprogress\\rounded.json",
-            "FileNameBackground": "__generated\\alternate_theme_images_widgets_textprogress_backgrounds_rounded_light.png",
+            "Preset": "alternate_theme\\presets\\textprogress\\rounded_dark.json",
+            "FileNameBackground": "__generated\\alternate_theme_images_widgets_textprogress_backgrounds_rounded_dark.png",
             "IndicatorPositionX": 12,
             "IndicatorPositionY": 10,
             "IndicatorPositionWidth": 150,
             "IndicatorPositionHeight": 30,
             "ProgressRangeMax": 100,
             "ProgressInitialValue": 60
+          },
+          {
+            "Type": "AnalogClock",
+            "Name": "analogClock1",
+            "X": 240,
+            "Y": 10,
+            "Width": 240,
+            "Height": 240,
+            "FileNameBackground": "__generated\\alternate_theme_images_widgets_analogclock_backgrounds_small_plain_dark.png",
+            "RotationCenterX": 120,
+            "RotationCenterY": 120,
+            "Preset": "alternate_theme\\presets\\analogclock\\small_plain_dark.json",
+            "Easing": "Back",
+            "EasingOption": "Out",
+            "ClockHands": [
+              {
+                "Type": "HourClockHand",
+                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_hour_plain_dark.png",
+                "RotationCenterX": 9,
+                "RotationCenterY": 69
+              },
+              {
+                "Type": "MinuteClockHand",
+                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_minute_plain_dark.png",
+                "RotationCenterX": 10,
+                "RotationCenterY": 87
+              },
+              {
+                "Type": "SecondClockHand",
+                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_second_plain_dark.png",
+                "RotationCenterX": 2,
+                "RotationCenterY": 100
+              }
+            ],
+            "InitialHour": 10,
+            "InitialMinute": 10
+          },
+          {
+            "Type": "TextArea",
+            "Name": "textArea4",
+            "X": 36,
+            "Y": 152,
+            "Width": 167,
+            "Height": 24,
+            "TextId": "__SingleUse_WO7L",
+            "TextRotation": "0",
+            "AutoSize": true
           }
         ],
         "Interactions": []

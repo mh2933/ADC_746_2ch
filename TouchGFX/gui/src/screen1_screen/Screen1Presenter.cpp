@@ -37,3 +37,8 @@ void Screen1Presenter::tickCounterUpdated (int val)
     //view.setImageProgress (val);
     view.setTextProgress (val);
 }
+
+void Screen1Presenter::updateTime(uint8_t hour, uint8_t minute, uint8_t second)
+{
+    view.updateTime(hour, minute, second);
+}

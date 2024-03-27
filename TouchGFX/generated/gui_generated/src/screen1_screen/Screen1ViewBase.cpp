@@ -17,7 +17,7 @@ Screen1ViewBase::Screen1ViewBase()
     scalableImage1.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(scalableImage1);
 
-    textArea1voltage.setXY(50, 81);
+    textArea1voltage.setXY(16, 23);
     textArea1voltage.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea1voltage.setLinespacing(0);
     Unicode::snprintf(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_J30X).getText());
@@ -26,7 +26,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea1voltage.setTypedText(touchgfx::TypedText(T___SINGLEUSE_OR6I));
     add(textArea1voltage);
 
-    textArea2current.setXY(46, 124);
+    textArea2current.setXY(16, 61);
     textArea2current.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea2current.setLinespacing(0);
     Unicode::snprintf(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_CM21).getText());
@@ -35,7 +35,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea2current.setTypedText(touchgfx::TypedText(T___SINGLEUSE_A8E9));
     add(textArea2current);
 
-    textArea3.setXY(77, 168);
+    textArea3.setXY(46, 97);
     textArea3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea3.setLinespacing(0);
     Unicode::snprintf(textArea3Buffer, TEXTAREA3_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_D78A).getText());
@@ -44,14 +44,30 @@ Screen1ViewBase::Screen1ViewBase()
     textArea3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_D6U5));
     add(textArea3);
 
-    textProgress1.setXY(264, 112);
+    textProgress1.setXY(33, 176);
     textProgress1.setProgressIndicatorPosition(12, 10, 150, 30);
     textProgress1.setRange(0, 100);
-    textProgress1.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
+    textProgress1.setColor(touchgfx::Color::getColorFromRGB(255, 187, 0));
     textProgress1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_ST66));
-    textProgress1.setBackground(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_TEXTPROGRESS_BACKGROUNDS_ROUNDED_LIGHT_ID));
+    textProgress1.setBackground(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_TEXTPROGRESS_BACKGROUNDS_ROUNDED_DARK_ID));
     textProgress1.setValue(60);
     add(textProgress1);
+
+    analogClock1.setXY(240, 10);
+    analogClock1.setBackground(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_ANALOGCLOCK_BACKGROUNDS_SMALL_PLAIN_DARK_ID, 120, 120);
+    analogClock1.setupSecondHand(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_ANALOGCLOCK_HANDS_SMALL_SECOND_PLAIN_DARK_ID, 2, 100);
+    analogClock1.setupMinuteHand(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_ANALOGCLOCK_HANDS_SMALL_MINUTE_PLAIN_DARK_ID, 10, 87);
+    analogClock1.setMinuteHandSecondCorrection(false);
+    analogClock1.setupHourHand(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_ANALOGCLOCK_HANDS_SMALL_HOUR_PLAIN_DARK_ID, 9, 69);
+    analogClock1.setHourHandMinuteCorrection(false);
+    analogClock1.initializeTime24Hour(10, 10, 0);
+    add(analogClock1);
+
+    textArea4.setXY(36, 152);
+    textArea4.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
+    textArea4.setLinespacing(0);
+    textArea4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_WO7L));
+    add(textArea4);
 }
 
 Screen1ViewBase::~Screen1ViewBase()
