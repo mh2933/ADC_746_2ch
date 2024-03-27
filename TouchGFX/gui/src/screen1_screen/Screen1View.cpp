@@ -38,6 +38,11 @@ void Screen1View::setTextProgress (int val)
 	 textProgress1.setValue(val);
 }
 
+void Screen1View::updateTime(uint8_t hour, uint8_t minute, uint8_t second)
+{
+	analogClock1.setTime24Hour(hour, minute, second);
+}
+
 //void Screen1View::setImageProgress (int val)
 //{
 //	 imageProgress1.setValue(val);

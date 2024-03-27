@@ -11,7 +11,9 @@ C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:331:6:HAL_LTDC_MspI
 C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:448:6:HAL_LTDC_MspDeInit	8	static
 C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:517:6:HAL_QSPI_MspInit	64	static
 C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:580:6:HAL_QSPI_MspDeInit	8	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:617:6:HAL_UART_MspInit	192	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:672:6:HAL_UART_MspDeInit	8	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:805:6:HAL_SDRAM_MspInit	48	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:891:6:HAL_SDRAM_MspDeInit	8	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:617:6:HAL_RTC_MspInit	144	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:650:6:HAL_RTC_MspDeInit	0	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:672:6:HAL_UART_MspInit	192	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:727:6:HAL_UART_MspDeInit	8	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:860:6:HAL_SDRAM_MspInit	48	static
+C:/TouchGFXProjects/ADC_746_2ch/Core/Src/stm32f7xx_hal_msp.c:946:6:HAL_SDRAM_MspDeInit	8	static

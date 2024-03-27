@@ -10,3 +10,4 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:24:6:virtual void Screen1View::setADC2current(float)	16	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:30:6:virtual void Screen1View::setAh(float)	16	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:36:6:virtual void Screen1View::setTextProgress(int)	0	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:41:6:void Screen1View::updateTime(uint8_t, uint8_t, uint8_t)	0	static

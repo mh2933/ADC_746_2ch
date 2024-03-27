@@ -5,5 +5,6 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:30:6:virtual void Screen1Presenter::setAh(float)	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:35:6:virtual void Screen1Presenter::tickCounterUpdated(int)	1
 ../../TouchGFX/gui/include/gui/screen1_screen/Screen1Presenter.hpp:28:13:virtual Screen1Presenter::~Screen1Presenter()	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:41:6:virtual void Screen1Presenter::updateTime(uint8_t, uint8_t, uint8_t)	1
 ../../TouchGFX/gui/include/gui/screen1_screen/Screen1Presenter.hpp:28:13:virtual void* Screen1Presenter::_ZThn4_N16Screen1PresenterD1Ev()	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:4:1:Screen1Presenter::Screen1Presenter(Screen1View&)	1
