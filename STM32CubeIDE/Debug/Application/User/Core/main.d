@@ -58,7 +58,8 @@ Application/User/Core/main.o: \
  ../../LIBJPEG/Target/jconfig.h ../../LIBJPEG/Target/jdata_conf.h \
  ../../LIBJPEG/Target/jmorecfg.h ../../TouchGFX/App/app_touchgfx.h \
  ../../Drivers/BSP/STM32746G-Discovery/stm32746g_discovery_qspi.h \
- ../../Drivers/BSP/STM32746G-Discovery/../Components/n25q128a/n25q128a.h
+ ../../Drivers/BSP/STM32746G-Discovery/../Components/n25q128a/n25q128a.h \
+ ../../Drivers/BSP/STM32746G-Discovery/stm32746g_discovery.h
 ../../Core/Inc/main.h:
 ../../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../../Core/Inc/stm32f7xx_hal_conf.h:
@@ -121,3 +122,4 @@ Application/User/Core/main.o: \
 ../../TouchGFX/App/app_touchgfx.h:
 ../../Drivers/BSP/STM32746G-Discovery/stm32746g_discovery_qspi.h:
 ../../Drivers/BSP/STM32746G-Discovery/../Components/n25q128a/n25q128a.h:
+../../Drivers/BSP/STM32746G-Discovery/stm32746g_discovery.h:

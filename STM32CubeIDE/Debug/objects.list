@@ -53,6 +53,7 @@
 "./Application/User/gui/Model.o"
 "./Application/User/gui/Screen1Presenter.o"
 "./Application/User/gui/Screen1View.o"
+"./Drivers/BSP/stm32746g_discovery.o"
 "./Drivers/BSP/stm32746g_discovery_qspi.o"
 "./Drivers/CMSIS/system_stm32f7xx.o"
 "./Drivers/Components/ft5336.o"

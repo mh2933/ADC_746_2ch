@@ -155,9 +155,6 @@ void Model::tick()
 		{
 			Current = 0;
 		}
-
-
-
         previous_second = real_second;
     }
 

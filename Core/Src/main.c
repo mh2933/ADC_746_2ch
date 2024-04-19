@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stm32746g_discovery_qspi.h>
+#include <stm32746g_discovery.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -78,7 +79,10 @@ UART_HandleTypeDef huart1;
 SDRAM_HandleTypeDef hsdram1;
 
 /* Definitions for defaultTask */
+
 osThreadId_t defaultTaskHandle;
+osThreadId_t secondTaskHandle;
+
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 128 * 4,
@@ -98,6 +102,13 @@ const osThreadAttr_t videoTask_attributes = {
   .stack_size = 1000 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+
+const osThreadAttr_t secondTask_attributes = {
+  .name = "secondTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+
 /* USER CODE BEGIN PV */
 
 #ifdef __GNUC__
@@ -129,6 +140,7 @@ static void MX_RTC_Init(void);
 void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 extern void videoTaskFunc(void *argument);
+void secondTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 #define DMA_BUFFER_SIZE 2
@@ -240,6 +252,9 @@ int main(void)
 
   /* creation of videoTask */
   videoTaskHandle = osThreadNew(videoTaskFunc, NULL, &videoTask_attributes);
+
+  secondTaskHandle = osThreadNew(secondTask, NULL, &secondTask_attributes);
+
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -913,6 +928,20 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     osDelay(100);
+  }
+  /* USER CODE END 5 */
+}
+
+void secondTask(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+
+	BSP_LED_Init(LED_GREEN);
+  /* Infinite loop */
+  for(;;)
+  {
+	  BSP_LED_Toggle(LED_GREEN);
+    osDelay(1000);
   }
   /* USER CODE END 5 */
 }
