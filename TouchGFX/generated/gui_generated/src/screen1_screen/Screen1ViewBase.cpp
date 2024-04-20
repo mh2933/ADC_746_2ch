@@ -20,7 +20,7 @@ Screen1ViewBase::Screen1ViewBase()
     scalableImage1.setScalingAlgorithm(touchgfx::ScalableImage::NEAREST_NEIGHBOR);
     add(scalableImage1);
 
-    textArea1voltage.setXY(16, 37);
+    textArea1voltage.setXY(16, 68);
     textArea1voltage.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea1voltage.setLinespacing(0);
     Unicode::snprintf(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_J30X).getText());
@@ -29,7 +29,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea1voltage.setTypedText(touchgfx::TypedText(T___SINGLEUSE_OR6I));
     add(textArea1voltage);
 
-    textArea2current.setXY(12, 124);
+    textArea2current.setXY(14, 124);
     textArea2current.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea2current.setLinespacing(0);
     Unicode::snprintf(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_CM21).getText());
@@ -38,7 +38,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea2current.setTypedText(touchgfx::TypedText(T___SINGLEUSE_A8E9));
     add(textArea2current);
 
-    textArea3.setXY(46, 203);
+    textArea3.setXY(46, 180);
     textArea3.setColor(touchgfx::Color::getColorFromRGB(255, 255, 255));
     textArea3.setLinespacing(0);
     Unicode::snprintf(textArea3Buffer, TEXTAREA3_SIZE, "%s", touchgfx::TypedText(T___SINGLEUSE_D78A).getText());
@@ -50,7 +50,7 @@ Screen1ViewBase::Screen1ViewBase()
     textProgress1.setXY(273, 73);
     textProgress1.setProgressIndicatorPosition(10, 60, 130, 30);
     textProgress1.setRange(0, 100);
-    textProgress1.setColor(touchgfx::Color::getColorFromRGB(255, 192, 74));
+    textProgress1.setColor(touchgfx::Color::getColorFromRGB(240, 187, 72));
     textProgress1.setTypedText(touchgfx::TypedText(T___SINGLEUSE_ST66));
     textProgress1.setBackground(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_WIDGETS_TEXTPROGRESS_BACKGROUNDS_ROUND_DARK_ID));
     textProgress1.setValue(60);
@@ -75,6 +75,84 @@ Screen1ViewBase::Screen1ViewBase()
     circleProgress1.setPainter(circleProgress1Painter);
     circleProgress1.setValue(60);
     add(circleProgress1);
+
+    textureMapper1.setXY(0, 92);
+    textureMapper1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_SMALL_THIN_LIGHT_ID));
+    textureMapper1.setWidth(234);
+    textureMapper1.setHeight(32);
+    textureMapper1.setBitmapPosition(-123.0f, 15.0f);
+    textureMapper1.setScale(1.0f);
+    textureMapper1.setCameraDistance(1000.0f);
+    textureMapper1.setOrigo(117.0f, 16.0f, 1000.0f);
+    textureMapper1.setCamera(117.0f, 16.0f);
+    textureMapper1.setAngles(0.0f, 0.0f, 0.0f);
+    textureMapper1.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1);
+
+    textureMapper1_2.setXY(0, 36);
+    textureMapper1_2.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_MEDIUM_THIN_LIGHT_ID));
+    textureMapper1_2.setWidth(234);
+    textureMapper1_2.setHeight(32);
+    textureMapper1_2.setBitmapPosition(-283.0f, 15.0f);
+    textureMapper1_2.setScale(1.0f);
+    textureMapper1_2.setCameraDistance(1000.0f);
+    textureMapper1_2.setOrigo(117.0f, 16.0f, 1000.0f);
+    textureMapper1_2.setCamera(117.0f, 16.0f);
+    textureMapper1_2.setAngles(0.0f, 0.0f, 0.0f);
+    textureMapper1_2.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1_2);
+
+    textureMapper1_2_1.setXY(0, 204);
+    textureMapper1_2_1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_LARGE_THIN_LIGHT_ID));
+    textureMapper1_2_1.setWidth(234);
+    textureMapper1_2_1.setHeight(32);
+    textureMapper1_2_1.setBitmapPosition(-395.0f, 15.0f);
+    textureMapper1_2_1.setScale(1.0f);
+    textureMapper1_2_1.setCameraDistance(1000.0f);
+    textureMapper1_2_1.setOrigo(117.0f, 16.0f, 1000.0f);
+    textureMapper1_2_1.setCamera(117.0f, 16.0f);
+    textureMapper1_2_1.setAngles(0.0f, 0.0f, 0.0f);
+    textureMapper1_2_1.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1_2_1);
+
+    textureMapper1_2_1_1.setXY(208, 52);
+    textureMapper1_2_1_1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_LARGE_THIN_LIGHT_ID));
+    textureMapper1_2_1_1.setWidth(51);
+    textureMapper1_2_1_1.setHeight(168);
+    textureMapper1_2_1_1.setBitmapPosition(-486.5f, 83.0f);
+    textureMapper1_2_1_1.setScale(1.0f);
+    textureMapper1_2_1_1.setCameraDistance(1000.0f);
+    textureMapper1_2_1_1.setOrigo(25.5f, 84.0f, 1000.0f);
+    textureMapper1_2_1_1.setCamera(25.5f, 84.0f);
+    textureMapper1_2_1_1.setAngles(0.0f, 0.0f, 1.571f);
+    textureMapper1_2_1_1.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1_2_1_1);
+
+    textureMapper1_2_1_1_1.setXY(-28, 52);
+    textureMapper1_2_1_1_1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_LARGE_THIN_LIGHT_ID));
+    textureMapper1_2_1_1_1.setWidth(57);
+    textureMapper1_2_1_1_1.setHeight(168);
+    textureMapper1_2_1_1_1.setBitmapPosition(-483.5f, 83.0f);
+    textureMapper1_2_1_1_1.setScale(1.0f);
+    textureMapper1_2_1_1_1.setCameraDistance(1000.0f);
+    textureMapper1_2_1_1_1.setOrigo(28.5f, 84.0f, 1000.0f);
+    textureMapper1_2_1_1_1.setCamera(28.5f, 84.0f);
+    textureMapper1_2_1_1_1.setAngles(0.0f, 0.0f, 1.571f);
+    textureMapper1_2_1_1_1.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1_2_1_1_1);
+
+    textureMapper1_1.setXY(0, 148);
+    textureMapper1_1.setBitmap(touchgfx::Bitmap(BITMAP_ALTERNATE_THEME_IMAGES_DIVIDERS_HORIZONTAL_SMALL_THIN_LIGHT_ID));
+    textureMapper1_1.setWidth(234);
+    textureMapper1_1.setHeight(32);
+    textureMapper1_1.setBitmapPosition(-123.0f, 15.0f);
+    textureMapper1_1.setScale(1.0f);
+    textureMapper1_1.setCameraDistance(1000.0f);
+    textureMapper1_1.setOrigo(117.0f, 16.0f, 1000.0f);
+    textureMapper1_1.setCamera(117.0f, 16.0f);
+    textureMapper1_1.setAngles(0.0f, 0.0f, 0.0f);
+    textureMapper1_1.setRenderingAlgorithm(touchgfx::TextureMapper::NEAREST_NEIGHBOR);
+    add(textureMapper1_1);
 }
 
 Screen1ViewBase::~Screen1ViewBase()

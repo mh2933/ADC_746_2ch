@@ -14,6 +14,7 @@
 #include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
 #include <touchgfx/widgets/canvas/PainterRGB565.hpp>
+#include <touchgfx/widgets/TextureMapper.hpp>
 
 class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
@@ -39,6 +40,12 @@ protected:
     touchgfx::TextArea textArea4;
     touchgfx::CircleProgress circleProgress1;
     touchgfx::PainterRGB565 circleProgress1Painter;
+    touchgfx::TextureMapper textureMapper1;
+    touchgfx::TextureMapper textureMapper1_2;
+    touchgfx::TextureMapper textureMapper1_2_1;
+    touchgfx::TextureMapper textureMapper1_2_1_1;
+    touchgfx::TextureMapper textureMapper1_2_1_1_1;
+    touchgfx::TextureMapper textureMapper1_1;
 
     /*
      * Wildcard Buffers

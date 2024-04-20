@@ -229,13 +229,13 @@ int main(void)
   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
-  float call_C_calcMilliAh(C *p);
-
-  void ccc(struct C* p)
-  {
-	  float mAh = call_C_calcMilliAh(p);
-	  printf("mAh %f\n", mAh);
-  }
+//  float call_C_calcMilliAh(C *p);
+//
+//  void ccc(struct C* p)
+//  {
+//	  float mAh = call_C_calcMilliAh(p);
+//	  printf("mAh %f\n", mAh);
+//  }
 
   // Use mAh as needed
 

@@ -26,11 +26,11 @@ extern "C"
 
 
 
-    extern "C" float call_C_calcMilliAh(C *p)
-    {
-    	return p->calcMilliAh();
-    }
-    }
+//    extern "C" float call_C_calcMilliAh(C *p)
+//    {
+//    	return p->calcMilliAh();
+//    }
+//    }
 
     float map(float x, float in_min, float in_max, float out_min, float out_max)
     {

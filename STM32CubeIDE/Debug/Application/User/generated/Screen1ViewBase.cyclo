@@ -28,13 +28,13 @@
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainter.hpp:78:18:virtual bool touchgfx::AbstractPainter::setup(const touchgfx::Rect&) const	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/canvas/AbstractPainter.hpp:90:18:virtual void touchgfx::AbstractPainter::tearDown() const	1
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:36:7:touchgfx::View<Screen1Presenter>::~View()	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:85:6:virtual void Screen1ViewBase::setupScreen()	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:163:6:virtual void Screen1ViewBase::setupScreen()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:62:7:touchgfx::TextAreaWithOneWildcard::~TextAreaWithOneWildcard()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/TypedText.hpp:65:13:virtual touchgfx::TypedText::~TypedText()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:62:7:virtual touchgfx::TextAreaWithOneWildcard::~TextAreaWithOneWildcard()	1
 ../../Middlewares/ST/touchgfx/framework/include/mvp/View.hpp:36:7:virtual touchgfx::View<Screen1Presenter>::~View()	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:80:1:Screen1ViewBase::~Screen1ViewBase()	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:80:1:virtual Screen1ViewBase::~Screen1ViewBase()	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:158:1:Screen1ViewBase::~Screen1ViewBase()	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/generated/gui_generated/src/screen1_screen/Screen1ViewBase.cpp:158:1:virtual Screen1ViewBase::~Screen1ViewBase()	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/Drawable.hpp:121:18:virtual void touchgfx::Drawable::invalidateContent() const	2
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextAreaWithWildcard.hpp:43:18:virtual void touchgfx::TextAreaWithWildcardBase::invalidateContent() const	1
 ../../Middlewares/ST/touchgfx/framework/include/touchgfx/widgets/TextArea.hpp:111:18:virtual void touchgfx::TextArea::setBaselineY(int16_t)	1
