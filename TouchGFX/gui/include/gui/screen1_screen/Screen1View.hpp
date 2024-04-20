@@ -17,7 +17,8 @@ public:
     virtual void setAh (float val);
 //    virtual void setImageProgress (int val);
     virtual void setTextProgress (int val);
-    void updateTime(uint8_t hour, uint8_t minute, uint8_t second);
+    virtual void setCircleProgress (int val);
+    //void updateTime(uint8_t hour, uint8_t minute, uint8_t second);
 protected:
 };
 

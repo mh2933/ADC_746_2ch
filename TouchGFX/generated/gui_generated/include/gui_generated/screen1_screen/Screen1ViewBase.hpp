@@ -11,8 +11,9 @@
 #include <touchgfx/widgets/ScalableImage.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/containers/progress_indicators/TextProgress.hpp>
-#include <touchgfx/containers/clock/AnalogClock.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
+#include <touchgfx/containers/progress_indicators/CircleProgress.hpp>
+#include <touchgfx/widgets/canvas/PainterRGB565.hpp>
 
 class Screen1ViewBase : public touchgfx::View<Screen1Presenter>
 {
@@ -35,20 +36,27 @@ protected:
     touchgfx::TextAreaWithOneWildcard textArea2current;
     touchgfx::TextAreaWithOneWildcard textArea3;
     touchgfx::TextProgress textProgress1;
-    touchgfx::AnalogClock analogClock1;
     touchgfx::TextArea textArea4;
+    touchgfx::CircleProgress circleProgress1;
+    touchgfx::PainterRGB565 circleProgress1Painter;
 
     /*
      * Wildcard Buffers
      */
-    static const uint16_t TEXTAREA1VOLTAGE_SIZE = 8;
+    static const uint16_t TEXTAREA1VOLTAGE_SIZE = 6;
     touchgfx::Unicode::UnicodeChar textArea1voltageBuffer[TEXTAREA1VOLTAGE_SIZE];
-    static const uint16_t TEXTAREA2CURRENT_SIZE = 8;
+    static const uint16_t TEXTAREA2CURRENT_SIZE = 6;
     touchgfx::Unicode::UnicodeChar textArea2currentBuffer[TEXTAREA2CURRENT_SIZE];
     static const uint16_t TEXTAREA3_SIZE = 7;
     touchgfx::Unicode::UnicodeChar textArea3Buffer[TEXTAREA3_SIZE];
 
 private:
+
+    /*
+     * Canvas Buffer Size
+     */
+    static const uint32_t CANVAS_BUFFER_SIZE = 7200;
+    uint8_t canvasBuffer[CANVAS_BUFFER_SIZE];
 
 };
 

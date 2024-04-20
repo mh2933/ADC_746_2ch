@@ -3,6 +3,7 @@
     "Screens": [
       {
         "Name": "Screen1",
+        "CanvasBufferSize": 7200,
         "Components": [
           {
             "Type": "ScalableImage",
@@ -16,8 +17,8 @@
             "Type": "TextArea",
             "Name": "textArea1voltage",
             "X": 16,
-            "Y": 23,
-            "Width": 209,
+            "Y": 37,
+            "Width": 190,
             "Height": 24,
             "TextId": "__SingleUse_OR6I",
             "TextRotation": "0",
@@ -30,15 +31,15 @@
             "Wildcard1": {
               "TextId": "__SingleUse_J30X",
               "UseBuffer": true,
-              "BufferSize": 8
+              "BufferSize": 6
             }
           },
           {
             "Type": "TextArea",
             "Name": "textArea2current",
             "X": 12,
-            "Y": 62,
-            "Width": 213,
+            "Y": 124,
+            "Width": 194,
             "Height": 24,
             "TextId": "__SingleUse_A8E9",
             "TextRotation": "0",
@@ -51,15 +52,15 @@
             "Wildcard1": {
               "TextId": "__SingleUse_CM21",
               "UseBuffer": true,
-              "BufferSize": 8
+              "BufferSize": 6
             }
           },
           {
             "Type": "TextArea",
             "Name": "textArea3",
-            "X": 45,
-            "Y": 99,
-            "Width": 147,
+            "X": 46,
+            "Y": 203,
+            "Width": 154,
             "Height": 24,
             "TextId": "__SingleUse_D6U5",
             "TextRotation": "0",
@@ -78,70 +79,58 @@
           {
             "Type": "TextProgress",
             "Name": "textProgress1",
-            "X": 33,
-            "Y": 176,
-            "Width": 175,
-            "Height": 50,
+            "X": 273,
+            "Y": 73,
+            "Width": 150,
+            "Height": 150,
             "TextId": "__SingleUse_ST66",
             "Color": {
               "Red": 255,
-              "Green": 187
+              "Green": 192,
+              "Blue": 74
             },
-            "Preset": "alternate_theme\\presets\\textprogress\\rounded_dark.json",
-            "FileNameBackground": "__generated\\alternate_theme_images_widgets_textprogress_backgrounds_rounded_dark.png",
-            "IndicatorPositionX": 12,
-            "IndicatorPositionY": 10,
-            "IndicatorPositionWidth": 150,
+            "Preset": "alternate_theme\\presets\\textprogress\\round_dark.json",
+            "FileNameBackground": "__generated\\alternate_theme_images_widgets_textprogress_backgrounds_round_dark.png",
+            "IndicatorPositionX": 10,
+            "IndicatorPositionY": 60,
+            "IndicatorPositionWidth": 130,
             "IndicatorPositionHeight": 30,
             "ProgressRangeMax": 100,
             "ProgressInitialValue": 60
           },
           {
-            "Type": "AnalogClock",
-            "Name": "analogClock1",
-            "X": 240,
-            "Y": 10,
-            "Width": 240,
-            "Height": 240,
-            "FileNameBackground": "__generated\\alternate_theme_images_widgets_analogclock_backgrounds_small_plain_dark.png",
-            "RotationCenterX": 120,
-            "RotationCenterY": 120,
-            "Preset": "alternate_theme\\presets\\analogclock\\small_plain_dark.json",
-            "Easing": "Back",
-            "EasingOption": "Out",
-            "ClockHands": [
-              {
-                "Type": "HourClockHand",
-                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_hour_plain_dark.png",
-                "RotationCenterX": 9,
-                "RotationCenterY": 69
-              },
-              {
-                "Type": "MinuteClockHand",
-                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_minute_plain_dark.png",
-                "RotationCenterX": 10,
-                "RotationCenterY": 87
-              },
-              {
-                "Type": "SecondClockHand",
-                "FileNameHandImage": "__generated\\alternate_theme_images_widgets_analogclock_hands_small_second_plain_dark.png",
-                "RotationCenterX": 2,
-                "RotationCenterY": 100
-              }
-            ],
-            "InitialHour": 10,
-            "InitialMinute": 10
-          },
-          {
             "Type": "TextArea",
             "Name": "textArea4",
-            "X": 36,
-            "Y": 152,
+            "X": 265,
+            "Y": 13,
             "Width": 167,
             "Height": 24,
             "TextId": "__SingleUse_WO7L",
             "TextRotation": "0",
             "AutoSize": true
+          },
+          {
+            "Type": "CircleProgress",
+            "Name": "circleProgress1",
+            "X": 253,
+            "Y": 53,
+            "Width": 190,
+            "Height": 190,
+            "Color": {
+              "Red": 254,
+              "Green": 189,
+              "Blue": 23
+            },
+            "CenterX": 95.0,
+            "CenterY": 95.0,
+            "Radius": 85.0,
+            "LineWidth": 20.0,
+            "EndAngle": 360.0,
+            "CapPrecision": "Butt",
+            "Preset": "alternate_theme\\presets\\circleprogress\\action_large.json",
+            "FileNameBackground": "__generated\\alternate_theme_images_widgets_circleprogress_backgrounds_large.png",
+            "ProgressRangeMax": 100,
+            "ProgressInitialValue": 60
           }
         ],
         "Interactions": []

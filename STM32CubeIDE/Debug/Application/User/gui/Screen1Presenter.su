@@ -3,8 +3,7 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:20:6:virtual void Screen1Presenter::setADC1voltage(float)	0	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:25:6:virtual void Screen1Presenter::setADC2current(float)	0	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:30:6:virtual void Screen1Presenter::setAh(float)	0	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:35:6:virtual void Screen1Presenter::tickCounterUpdated(int)	0	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:35:6:virtual void Screen1Presenter::tickCounterUpdated(int)	16	static
 ../../TouchGFX/gui/include/gui/screen1_screen/Screen1Presenter.hpp:28:13:virtual Screen1Presenter::~Screen1Presenter()	8	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:41:6:virtual void Screen1Presenter::updateTime(uint8_t, uint8_t, uint8_t)	0	static
 ../../TouchGFX/gui/include/gui/screen1_screen/Screen1Presenter.hpp:28:13:virtual void* Screen1Presenter::_ZThn4_N16Screen1PresenterD1Ev()	0	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1Presenter.cpp:4:1:Screen1Presenter::Screen1Presenter(Screen1View&)	8	static
