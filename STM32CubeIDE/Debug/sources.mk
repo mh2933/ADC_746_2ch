@@ -40,7 +40,10 @@ CPP_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 Application/User/Core \
+Application/User/FATFS/App \
+Application/User/FATFS/Target \
 Application/User/LIBJPEG/App \
+Application/User/LIBJPEG/Target \
 Application/User/Startup \
 Application/User/TouchGFX/App \
 Application/User/TouchGFX/target \
@@ -51,6 +54,7 @@ Drivers/BSP \
 Drivers/CMSIS \
 Drivers/Components \
 Drivers/STM32F7xx_HAL_Driver \
+Middlewares/FatFs \
 Middlewares/FreeRTOS \
 Middlewares/LibJPEG \
 

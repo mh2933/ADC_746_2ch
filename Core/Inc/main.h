@@ -55,7 +55,11 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+extern float mAh;
+
 uint8_t getRTCSeconds();
+
+//uint8_t real_second;
 
 /* USER CODE END EFP */
 

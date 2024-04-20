@@ -1,7 +1,0 @@
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:924:6:StartDefaultTask	8	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:935:6:secondTask	8	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:149:1:__io_putchar	16	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:289:6:SystemClock_Config	88	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:167:5:main	120	static,ignoring_inline_asm
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:994:6:HAL_TIM_PeriodElapsedCallback	0	static
-C:/TouchGFXProjects/ADC_746_2ch/Core/Src/main.c:1011:6:Error_Handler	0	static

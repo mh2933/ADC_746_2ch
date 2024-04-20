@@ -1,7 +1,0 @@
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:25:11:float map(float, float, float, float, float)	0	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:32:1:Model::Model()	8	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:37:7:float Model::adcReadVoltage()	56	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:75:7:float Model::adcReadCurrent()	56	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:118:9:uint8_t Model::rtcSeconds()	16	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:128:7:float Model::calcMilliAh()	24	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:162:6:void Model::tick()	16	static

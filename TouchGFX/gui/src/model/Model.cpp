@@ -6,8 +6,11 @@
 #include "stm32f7xx_hal.h"
 
 
+
+
 #ifndef SIMULATOR
 #include "main.h"
+
 
 
 extern "C"
@@ -18,9 +21,16 @@ extern "C"
     extern RTC_TimeTypeDef RTC_Time;
     extern RTC_DateTypeDef RTC_Date;
     extern RTC_TimeTypeDef sTime;
+//    extern float mAh;
+//    extern uint8_t real_second;
 
 
-//    int _write(int file, char *ptr, int len);
+
+    extern "C" float call_C_calcMilliAh(C *p)
+    {
+    	return p->calcMilliAh();
+    }
+    }
 
     float map(float x, float in_min, float in_max, float out_min, float out_max)
     {
@@ -97,17 +107,17 @@ float Model::adcReadCurrent()
     	adc_count++;
     }
 
-    printf("adc_count %.2f\n", adc_count);
+    //printf("adc_count %.2f\n", adc_count);
 
     adc2_average = adc_sum_2 / adc_count;
 
 	float v_per_ampere = 0.0239;
 	float Vcc = 3.320;
-	printf("adc2_average: %f\n\n", adc2_average);
+	//printf("adc2_average: %f\n\n", adc2_average);
 	float midpoint_val = 1.5425;
 
 	float calculated_volt = adc2_average * (Vcc / 4095.0);
-	printf("calculated_volt: %.5f\n\n", calculated_volt);
+	//printf("calculated_volt: %.5f\n\n", calculated_volt);
 	float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
 
     Current = map(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
@@ -172,8 +182,8 @@ void Model::tick()
     // tickCounter is related to percentage bargraph on the UI
     tickCounter = map(mAh, 10005, 0, 100, 0);
 
-    printf("real_second %d\n", real_second);
-    printf("mAh %f\n", mAh);
+    //printf("real_second %d\n", real_second);
+    //printf("mAh %f\n", mAh);
 
 #endif
 
