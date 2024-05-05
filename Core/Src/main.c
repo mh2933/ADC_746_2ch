@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "fatfs.h"
 #include "libjpeg.h"
 #include "app_touchgfx.h"
 
@@ -27,6 +28,10 @@
 /* USER CODE BEGIN Includes */
 #include <stm32746g_discovery_qspi.h>
 #include <stm32746g_discovery.h>
+#include <stdio.h>
+#include <string.h>
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -74,15 +79,16 @@ QSPI_HandleTypeDef hqspi;
 
 RTC_HandleTypeDef hrtc;
 
+SD_HandleTypeDef hsd1;
+DMA_HandleTypeDef hdma_sdmmc1_rx;
+DMA_HandleTypeDef hdma_sdmmc1_tx;
+
 UART_HandleTypeDef huart1;
 
 SDRAM_HandleTypeDef hsdram1;
 
 /* Definitions for defaultTask */
-
 osThreadId_t defaultTaskHandle;
-osThreadId_t secondTaskHandle;
-
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
   .stack_size = 128 * 4,
@@ -102,14 +108,14 @@ const osThreadAttr_t videoTask_attributes = {
   .stack_size = 1000 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* USER CODE BEGIN PV */
 
+osThreadId_t secondTaskHandle;
 const osThreadAttr_t secondTask_attributes = {
   .name = "secondTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 1000 * 4,
+  .priority = (osPriority_t) osPriorityLow,
 };
-
-/* USER CODE BEGIN PV */
 
 #ifdef __GNUC__
   #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
@@ -128,7 +134,7 @@ static FMC_SDRAM_CommandTypeDef Command;
 void SystemClock_Config(void);
 static void MPU_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_CRC_Init(void);
+static void MX_DMA_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_FMC_Init(void);
 static void MX_I2C3_Init(void);
@@ -137,12 +143,16 @@ static void MX_QUADSPI_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_RTC_Init(void);
+static void MX_SDMMC1_SD_Init(void);
+static void MX_CRC_Init(void);
 void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 extern void videoTaskFunc(void *argument);
-void secondTask(void *argument);
+
 
 /* USER CODE BEGIN PFP */
+void secondTask(void *argument);
+
 #define DMA_BUFFER_SIZE 2
 uint32_t dma_buffer[DMA_BUFFER_SIZE];
 
@@ -156,6 +166,20 @@ PUTCHAR_PROTOTYPE
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+//SD Card variables FATFS
+//uint8_t retSD;    /* Return value for SD */
+extern char SDPath[4];   /* SD logical drive path */
+extern FATFS SDFatFS;    /* File system object for SD logical drive */
+extern FIL SDFile;       /* File object for SD */
+float mAh;
+
+
+//FILE I/O variables
+FRESULT res;									/* FastFs function common result code */
+uint32_t byteswritten, bytesread;				/* File write/read counts */
+uint8_t wtext[]= "testtext";  			    /* File write buffer */
+uint8_t rtext[100];								/* File read buffer */
 
 
 /* USER CODE END 0 */
@@ -198,7 +222,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_CRC_Init();
+  MX_DMA_Init();
   MX_DMA2D_Init();
   MX_FMC_Init();
   MX_I2C3_Init();
@@ -208,19 +232,33 @@ int main(void)
   MX_ADC3_Init();
   MX_USART1_UART_Init();
   MX_RTC_Init();
+  MX_SDMMC1_SD_Init();
+  MX_CRC_Init();
+  MX_FATFS_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
   /* USER CODE BEGIN 2 */
 
+//  float call_C_calcMilliAh(C *p);
+//
+//  void ccc(struct C* p)
+//  {
+//	  float mAh = call_C_calcMilliAh(p);
+//	  printf("mAh %f\n", mAh);
+//  }
+
+  // Use mAh as needed
+
+
   // Redirect the standard output to UART
-  int _write(int file, char *ptr, int len) {
-      int DataIdx;
-      for (DataIdx = 0; DataIdx < len; DataIdx++) {
-          __io_putchar(*ptr++);
-      }
-      return len;
-  }
+//  int _write(int file, char *ptr, int len) {
+//      int DataIdx;
+//      for (DataIdx = 0; DataIdx < len; DataIdx++) {
+//          __io_putchar(*ptr++);
+//      }
+//      return len;
+//  }
 
   /* USER CODE END 2 */
 
@@ -253,10 +291,10 @@ int main(void)
   /* creation of videoTask */
   videoTaskHandle = osThreadNew(videoTaskFunc, NULL, &videoTask_attributes);
 
-  secondTaskHandle = osThreadNew(secondTask, NULL, &secondTask_attributes);
-
-
   /* USER CODE BEGIN RTOS_THREADS */
+
+  //secondTaskHandle = osThreadNew(secondTask, NULL, &secondTask_attributes);
+
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -274,6 +312,7 @@ int main(void)
 
   while (1)
   {
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -312,7 +351,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 25;
   RCC_OscInitStruct.PLL.PLLN = 432;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -688,6 +727,34 @@ static void MX_RTC_Init(void)
 }
 
 /**
+  * @brief SDMMC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SDMMC1_SD_Init(void)
+{
+
+  /* USER CODE BEGIN SDMMC1_Init 0 */
+
+  /* USER CODE END SDMMC1_Init 0 */
+
+  /* USER CODE BEGIN SDMMC1_Init 1 */
+
+  /* USER CODE END SDMMC1_Init 1 */
+  hsd1.Instance = SDMMC1;
+  hsd1.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
+  hsd1.Init.ClockBypass = SDMMC_CLOCK_BYPASS_DISABLE;
+  hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
+  hsd1.Init.BusWide = SDMMC_BUS_WIDE_1B;
+  hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
+  hsd1.Init.ClockDiv = 0;
+  /* USER CODE BEGIN SDMMC1_Init 2 */
+
+  /* USER CODE END SDMMC1_Init 2 */
+
+}
+
+/**
   * @brief USART1 Initialization Function
   * @param None
   * @retval None
@@ -719,6 +786,25 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 2 */
 
   /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
+  /* DMA2_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream6_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream6_IRQn);
 
 }
 
@@ -836,6 +922,7 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOJ_CLK_ENABLE();
@@ -843,7 +930,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOK_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOI_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
@@ -912,6 +998,23 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+//extern xQueueHandle messageQ;
+unsigned int val = 0;
+
+//void StartDefaultTask(void * argument)
+//{
+//
+//  /* Infinite loop */
+//  for(;;)
+//  {
+//	  xQueueGenericSend(messageQ, &val, 0, xCopyPosition);
+//	  val++;
+//
+//    osDelay(1);
+//  }
+//  /* USER CODE END 5 */
+//}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -921,28 +1024,64 @@ static void MX_GPIO_Init(void)
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+void StartDefaultTask(void * argument)
 {
+
+  char* wtext = (char*)argument;
+
+  /* init code for FATFS */
+  MX_FATFS_Init();
+
   /* USER CODE BEGIN 5 */
+	//1. Mount - 0
+	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+
+	//TEST Write operation
+	//2. Open file for Writing
+	if(f_open(&SDFile, "F7FILE1.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+	{
+		printf("Failed to open Write file\r\n");
+	}
+	else
+	{
+		printf("Opened Write file successfully\r\n");
+		//Write data to text file
+		res = f_write(&SDFile, wtext, strlen((char *)wtext), (void*)&byteswritten);
+		if((byteswritten == 0) || (res != FR_OK))
+		{
+			printf("Failed to write file!\r\n");
+		}
+		else
+		{
+			printf("File written successfully\r\n");
+			printf("Write Content: %s\r\n", wtext);
+		}
+		f_close(&SDFile);
+	}
+
+	//Test read file
+	f_open(&SDFile, "F7FILE1.TXT",  FA_READ);
+		memset(rtext,0,sizeof(rtext));
+		res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesread);
+		if((bytesread == 0) || (res != FR_OK))
+		{
+			printf("Failed to read file!\r\n");
+		}
+		else
+		{
+			printf("File read successfully\r\n");
+			printf("File content: %s\r\n", (char *)rtext);
+		}
+		f_close(&SDFile);
+
+
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(100);
+    osDelay(1);
   }
-  /* USER CODE END 5 */
-}
-
-void secondTask(void *argument)
-{
-  /* USER CODE BEGIN 5 */
-
-	BSP_LED_Init(LED_GREEN);
-  /* Infinite loop */
-  for(;;)
-  {
-	  BSP_LED_Toggle(LED_GREEN);
-    osDelay(1000);
-  }
+  return;
   /* USER CODE END 5 */
 }
 

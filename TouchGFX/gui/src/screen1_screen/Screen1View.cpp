@@ -17,7 +17,7 @@ void Screen1View::tearDownScreen()
 
 void Screen1View::setADC1voltage (float val)
 {
-	 Unicode::snprintfFloat(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%.2f", val);
+	 Unicode::snprintfFloat(textArea1voltageBuffer, TEXTAREA1VOLTAGE_SIZE, "%.1f", val);
 	 textArea1voltage.invalidate();
 }
 
@@ -36,12 +36,18 @@ void Screen1View::setAh (float val)
 void Screen1View::setTextProgress (int val)
 {
 	 textProgress1.setValue(val);
+
 }
 
-void Screen1View::updateTime(uint8_t hour, uint8_t minute, uint8_t second)
+void Screen1View::setCircleProgress (int val)
 {
-	analogClock1.setTime24Hour(hour, minute, second);
+	circleProgress1.setValue(val);
 }
+
+//void Screen1View::updateTime(uint8_t hour, uint8_t minute, uint8_t second)
+//{
+//	analogClock1.setTime24Hour(hour, minute, second);
+//}
 
 //void Screen1View::setImageProgress (int val)
 //{

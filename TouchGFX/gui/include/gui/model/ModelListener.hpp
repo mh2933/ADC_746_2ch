@@ -19,7 +19,7 @@ public:
     virtual void setADC2current (float val) {};
     virtual void setAh (float val) {};
     virtual void tickCounterUpdated (int val) {};
-    virtual void updateTime(uint8_t hour, uint8_t minute, uint8_t second){};
+    //virtual void updateTime(uint8_t hour, uint8_t minute, uint8_t second){};
 
 protected:
     Model* model;

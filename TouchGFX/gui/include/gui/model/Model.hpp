@@ -15,10 +15,13 @@ public:
         modelListener = listener;
     }
 
-    //virtual void tickCounterUpdated(int value){};
     void tick();
     float adcReadVoltage();
     float adcReadCurrent();
+    uint8_t rtcSeconds();
+    float calcMilliAh();
+
+
 
 protected:
     ModelListener* modelListener;
@@ -32,6 +35,7 @@ protected:
     volatile int tickCounterNow;
     long count_milli_seconds;
     uint8_t previous_second;
+    uint8_t real_second;
 
 
     //volatile long int counting_milliseconds;
@@ -40,5 +44,7 @@ protected:
     //std::chrono::high_resolution_clock::time_point startTime;
 
 };
+
+
 
 #endif // MODEL_HPP
