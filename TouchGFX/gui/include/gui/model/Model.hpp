@@ -16,10 +16,9 @@ public:
     }
 
     void tick();
-    float adcReadVoltage();
-    float adcReadCurrent();
     uint8_t rtcSeconds();
     float calcMilliAh();
+    float mapFloat(float x, float in_min, float in_max, float out_min, float out_max);
 
 
 
@@ -36,6 +35,8 @@ protected:
     long count_milli_seconds;
     uint8_t previous_second;
     uint8_t real_second;
+    int ADC_Value;
+
 
 
     //volatile long int counting_milliseconds;
