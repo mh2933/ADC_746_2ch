@@ -20,9 +20,11 @@ using namespace std;
 #include "fatfs.h"
 #include "string.h"
 #include "stm32f7xx_hal.h"
+#include <cmsis_os2.h>
 
 extern "C"
 {
+    /* milliseconds */
     uint32_t HAL_GetTick(void);
     void StartDefaultTask(void * argument);
 
@@ -32,7 +34,8 @@ extern "C"
     extern RTC_DateTypeDef RTC_Date;
     extern RTC_TimeTypeDef sTime;
 
-    xQueueHandle messageQ;
+    extern osMessageQueueId_t adcCurrentQueueHandle;
+    extern osMessageQueueId_t adcVoltageQueueHandle;
 
     // Function to start the default task with the mAh value
 
@@ -119,97 +122,23 @@ extern "C"
 //    }
 //
 //
-    float map(float x, float in_min, float in_max, float out_min, float out_max)
-    {
-      return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
-    }
+//    float map(float x, float in_min, float in_max, float out_min, float out_max)
+//    {
+//      return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
+//    }
+
+
 }
 #endif
 
 Model::Model() : modelListener(0), Voltage (10.5), Current (6.5), mAh (8800), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0), previous_second(60)
 {
-	messageQ = xQueueGenericCreate(1, 1, 0);
+
 }
 
-float Model::adcReadVoltage()
+float Model::mapFloat(float x, float in_min, float in_max, float out_min, float out_max)
 {
-	// VOLTAGE CALCULATION
-	//  float r1 = 18;
-	//  float r2 = 1.2;
-    //  float voltage_divider = 17.26; // 1/(r2/(r1+r2))
-
-	ADC_ChannelConfTypeDef sConfig = {0};
-	float adc_sum_1 = 0.0;
-	float adc_count = 0.0;
-	float adc_average = 0.0;
-
-    for (uint16_t i = 0; i < 1000; i++)
-    {
-        // Configure for channel 0
-        sConfig.Channel = ADC_CHANNEL_0;
-        sConfig.Rank = ADC_REGULAR_RANK_1;
-        sConfig.SamplingTime = ADC_SAMPLETIME_112CYCLES;
-        if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
-        {
-            Error_Handler();
-        }
-
-        HAL_ADC_Start(&hadc3);
-        HAL_ADC_PollForConversion(&hadc3, 10);
-        float value_1 = HAL_ADC_GetValue(&hadc3);
-        HAL_ADC_Stop(&hadc3);
-        adc_sum_1 += value_1;
-        adc_count++;
-    }
-
-    adc_average = adc_sum_1 / adc_count;
-
-    Voltage = map(adc_average, 0, 4095, 0.0, 55.59);
-
-    return Voltage;
-}
-
-float Model::adcReadCurrent()
-{
-	ADC_ChannelConfTypeDef sConfig = {0};
-    float adc_sum_2 = 0.0;
-    float adc_count = 0;
-    float adc2_average = 0.0;
-
-    for (uint16_t i = 0; i < 1000; i++)
-    {
-    	sConfig.Channel = ADC_CHANNEL_8;
-        sConfig.Rank = ADC_REGULAR_RANK_1;
-        sConfig.SamplingTime = ADC_SAMPLETIME_112CYCLES;
-    	if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
-    	{
-    	    Error_Handler();
-    	}
-
-        HAL_ADC_Start(&hadc3);
-    	HAL_ADC_PollForConversion(&hadc3, 10);
-    	float value_2 = HAL_ADC_GetValue(&hadc3);
-    	HAL_ADC_Stop(&hadc3);
-    	adc_sum_2 += value_2;
-    	adc_count++;
-    }
-
-    //printf("adc_count %.2f\n", adc_count);
-
-    adc2_average = adc_sum_2 / adc_count;
-
-	float v_per_ampere = 0.0239;
-	float Vcc = 3.320;
-	//printf("adc2_average: %f\n\n", adc2_average);
-	float midpoint_val = 1.5425;
-
-	float calculated_volt = adc2_average * (Vcc / 4095.0);
-	//printf("calculated_volt: %.5f\n\n", calculated_volt);
-	float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
-
-    Current = map(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
-
-    return Current;
+	  return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
 }
 
 uint8_t Model::rtcSeconds()
@@ -231,7 +160,7 @@ float Model::calcMilliAh()
 
 	    	seconds = 1.0;
 
-			Current = adcReadCurrent();
+			//Current = adcReadCurrent();
 
 			// Calculate mAh consumed per second
 			float mAhConsumedPerSecond = (Current * seconds) / 3.6;
@@ -256,7 +185,7 @@ float Model::calcMilliAh()
     return mAh;
 }
 
- //Function to format the mAh value as a string
+ //Function to format the mAh value as a string and snprintf saves it to the buffer
 void formatMahValue(float mahValue, char* buffer, size_t bufferSize) {
     snprintf(buffer, bufferSize, "%.2f mAh", mahValue);
     return;
@@ -266,45 +195,88 @@ void Model::tick()
 {
 
 #ifndef SIMULATOR
+	if (osMessageQueueGetCount(adcCurrentQueueHandle)>0)  // if there is unread messgae in the queue
+	{
+		if (osMessageQueueGet(adcCurrentQueueHandle, &ADC_Value, 0, 0) == osOK) // if the message is read successfully
+		{
+		    float adc_sum_2 = 0.0;
+		    float adc_count = 0;
+		    float adc2_average = 0.0;
 
-    uint32_t currentMilliseconds = HAL_GetTick();
-    printf("currentMilleSeconds %ld\n", currentMilliseconds);
-    cout << "Hello" << endl;
+			for (uint32_t i = 0; i < 1000; i++)
+		    {
+		        float ADC_Value_float = static_cast<float>(ADC_Value);
+				adc_sum_2 += ADC_Value_float;
+		    	adc_count++;
+			}
 
+			adc2_average = adc_sum_2 / adc_count;
 
-//	if (xQueueReceive(messageQ, &counter, 0) == pdTRUE)
-//	{
-//
-//	}
-	float mahValue = 0;
+			float v_per_ampere = 0.0239;
+			float Vcc = 3.320;
+			//printf("adc2_average: %f\n\n", adc2_average);
+			float midpoint_val = 1.5425;
 
-    Voltage = adcReadVoltage();
+			float calculated_volt = adc2_average * (Vcc / 4095.0);
+			//printf("calculated_volt: %.5f\n\n", calculated_volt);
+			float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
+
+		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
+
+			modelListener->setADC2current(Current);
+			printf("inside model.cpp %d\n", ADC_Value);
+		}
+	}
+
+	if (osMessageQueueGetCount(adcVoltageQueueHandle)>0)  // if there is unread messgae in the queue
+	{
+		if (osMessageQueueGet(adcVoltageQueueHandle, &ADC_Value, 0, 0) == osOK) // if the message is read successfully
+		{
+			float adc_sum_1 = 0.0;
+			float adc_count = 0.0;
+			float adc_average = 0.0;
+
+			for (uint16_t i = 0; i < 1000; i++)
+		    {
+		        float ADC_Value_float = static_cast<float>(ADC_Value);
+				adc_sum_1 += ADC_Value_float;
+		    	adc_count++;
+			}
+
+			adc_average = adc_sum_1 / adc_count;
+
+            Voltage = mapFloat(adc_average, 0, 4095, 0.0, 55.59);
+
+			modelListener->setADC1voltage(Voltage);
+			printf("inside model.cpp %d\n", ADC_Value);
+		}
+	}
+
+//    uint32_t currentMilliseconds = HAL_GetTick();
+//    printf("currentMilleSeconds %ld\n", currentMilliseconds);
+//    cout << "Hello" << endl;
+
     if (Voltage < 0.2) Voltage = 0;
 
     mAh = calcMilliAh();
-    mahValue = mAh;
-    char wtext[15];  // Buffer to hold the formatted mAh value
-    formatMahValue(mahValue, wtext, sizeof(wtext));
-
-    // Pass the address of wtext to StartDefaultTask
-    StartDefaultTask(static_cast<void*>(wtext));
+//    float mahValue = mAh;
+//    char wtext[15];  // Buffer to hold the formatted mAh value
+//    formatMahValue(mahValue, wtext, sizeof(wtext));
+//
+//    // Pass the address of wtext to StartDefaultTask
+//    StartDefaultTask(static_cast<void*>(wtext));
 
 
     // tickCounter is related to percentage bargraph on the UI
-    tickCounter = map(mAh, 8805, 0, 100, 0);
+    tickCounter = mapFloat(mAh, 8805, 0, 100, 0);
 
-
-    //printf("real_second %d\n", real_second);
-    //printf("mAh %f\n", mAh);
 
 
 
 #endif
 
-    modelListener->setADC1voltage(Voltage);
-    modelListener->setADC2current(Current);
     modelListener->setAh(mAh);
     modelListener->tickCounterUpdated(tickCounter);
-    //modelListener->updateTime(RTC_Time.Hours, RTC_Time.Minutes, RTC_Time.Seconds);
+
 
 }

@@ -66,7 +66,8 @@ Application/User/gui/Model.o: \
  ../../Middlewares/Third_Party/FatFs/src/ff_gen_drv.h \
  ../../Middlewares/Third_Party/FatFs/src/diskio.h \
  ../../Middlewares/Third_Party/FatFs/src/ff.h \
- ../../FATFS/Target/sd_diskio.h
+ ../../FATFS/Target/sd_diskio.h \
+ ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h
 ../../TouchGFX/gui/include/gui/model/Model.hpp:
 ../../TouchGFX/gui/include/gui/model/ModelListener.hpp:
 ../../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
@@ -136,3 +137,4 @@ Application/User/gui/Model.o: \
 ../../Middlewares/Third_Party/FatFs/src/diskio.h:
 ../../Middlewares/Third_Party/FatFs/src/ff.h:
 ../../FATFS/Target/sd_diskio.h:
+../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:

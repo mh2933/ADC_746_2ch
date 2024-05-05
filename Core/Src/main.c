@@ -66,6 +66,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc3;
+DMA_HandleTypeDef hdma_adc3;
 
 CRC_HandleTypeDef hcrc;
 
@@ -108,6 +109,30 @@ const osThreadAttr_t videoTask_attributes = {
   .stack_size = 1000 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for adcCurrentTask */
+osThreadId_t adcCurrentTaskHandle;
+const osThreadAttr_t adcCurrentTask_attributes = {
+  .name = "adcCurrentTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for adcVoltageTask */
+osThreadId_t adcVoltageTaskHandle;
+const osThreadAttr_t adcVoltageTask_attributes = {
+  .name = "adcVoltageTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for adcCurrentQueue */
+osMessageQueueId_t adcCurrentQueueHandle;
+const osMessageQueueAttr_t adcCurrentQueue_attributes = {
+  .name = "adcCurrentQueue"
+};
+/* Definitions for adcVoltageQueue */
+osMessageQueueId_t adcVoltageQueueHandle;
+const osMessageQueueAttr_t adcVoltageQueue_attributes = {
+  .name = "adcVoltageQueue"
+};
 /* USER CODE BEGIN PV */
 
 osThreadId_t secondTaskHandle;
@@ -148,7 +173,8 @@ static void MX_CRC_Init(void);
 void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 extern void videoTaskFunc(void *argument);
-
+void StartAdcCurrentTask(void *argument);
+void StartAdcVoltageTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 void secondTask(void *argument);
@@ -166,6 +192,14 @@ PUTCHAR_PROTOTYPE
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+uint16_t ADC_val_current = 0;
+uint16_t ADC_val_voltage = 0;
+
+int map(int x, int in_min, int in_max, int out_min, int out_max)
+{
+  return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
+}
 
 //SD Card variables FATFS
 //uint8_t retSD;    /* Return value for SD */
@@ -277,6 +311,13 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* creation of adcCurrentQueue */
+  adcCurrentQueueHandle = osMessageQueueNew (10, sizeof(uint16_t), &adcCurrentQueue_attributes);
+
+  /* creation of adcVoltageQueue */
+  adcVoltageQueueHandle = osMessageQueueNew (10, sizeof(uint16_t), &adcVoltageQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -290,6 +331,12 @@ int main(void)
 
   /* creation of videoTask */
   videoTaskHandle = osThreadNew(videoTaskFunc, NULL, &videoTask_attributes);
+
+  /* creation of adcCurrentTask */
+  adcCurrentTaskHandle = osThreadNew(StartAdcCurrentTask, NULL, &adcCurrentTask_attributes);
+
+  /* creation of adcVoltageTask */
+  adcVoltageTaskHandle = osThreadNew(StartAdcVoltageTask, NULL, &adcVoltageTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 
@@ -403,13 +450,13 @@ static void MX_ADC3_Init(void)
   hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc3.Init.Resolution = ADC_RESOLUTION_12B;
   hadc3.Init.ScanConvMode = ADC_SCAN_ENABLE;
-  hadc3.Init.ContinuousConvMode = DISABLE;
+  hadc3.Init.ContinuousConvMode = ENABLE;
   hadc3.Init.DiscontinuousConvMode = DISABLE;
   hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc3.Init.ExternalTrigConv = ADC_SOFTWARE_START;
   hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc3.Init.NbrOfConversion = 2;
-  hadc3.Init.DMAContinuousRequests = DISABLE;
+  hadc3.Init.DMAContinuousRequests = ENABLE;
   hadc3.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   if (HAL_ADC_Init(&hadc3) != HAL_OK)
   {
@@ -745,7 +792,7 @@ static void MX_SDMMC1_SD_Init(void)
   hsd1.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
   hsd1.Init.ClockBypass = SDMMC_CLOCK_BYPASS_DISABLE;
   hsd1.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
-  hsd1.Init.BusWide = SDMMC_BUS_WIDE_1B;
+  hsd1.Init.BusWide = SDMMC_BUS_WIDE_4B;
   hsd1.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
   hsd1.Init.ClockDiv = 0;
   /* USER CODE BEGIN SDMMC1_Init 2 */
@@ -799,6 +846,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA2_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA2_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
   /* DMA2_Stream3_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream3_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream3_IRQn);
@@ -1024,14 +1074,8 @@ unsigned int val = 0;
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void * argument)
+void StartDefaultTask(void *argument)
 {
-
-  char* wtext = (char*)argument;
-
-  /* init code for FATFS */
-  MX_FATFS_Init();
-
   /* USER CODE BEGIN 5 */
 	//1. Mount - 0
 	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
@@ -1083,6 +1127,77 @@ void StartDefaultTask(void * argument)
   }
   return;
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartAdcCurrentTask */
+/**
+* @brief Function implementing the adcCurrentTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartAdcCurrentTask */
+void StartAdcCurrentTask(void *argument)
+{
+  /* USER CODE BEGIN StartAdcCurrentTask */
+	ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* Infinite loop */
+	  for(;;)
+	  {
+	    sConfig.Channel = ADC_CHANNEL_8;
+	    sConfig.Rank = ADC_REGULAR_RANK_1;
+	    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+	    if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+	    {
+	        Error_Handler();
+	    }
+
+		HAL_ADC_Start(&hadc3);
+		HAL_ADC_PollForConversion(&hadc3, 10);
+		int ADC_val_current = HAL_ADC_GetValue(&hadc3);
+		HAL_ADC_Stop(&hadc3);
+		printf("adc inside main.c %d\n", ADC_val_current);
+
+		osMessageQueuePut(adcCurrentQueueHandle, &ADC_val_current, 0, 0);
+
+		osDelay(200);
+	  }
+  /* USER CODE END StartAdcCurrentTask */
+}
+
+/* USER CODE BEGIN Header_StartAdcVoltageTask */
+/**
+* @brief Function implementing the adcVoltageTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartAdcVoltageTask */
+void StartAdcVoltageTask(void *argument)
+{
+  /* USER CODE BEGIN StartAdcVoltageTask */
+	ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* Infinite loop */
+    for(;;)
+    {
+        sConfig.Channel = ADC_CHANNEL_0;
+        sConfig.Rank = ADC_REGULAR_RANK_1;
+        sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+        if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
+        {
+            Error_Handler();
+        }
+
+        HAL_ADC_Start(&hadc3);
+        HAL_ADC_PollForConversion(&hadc3, 10);
+        int ADC_val_voltage = HAL_ADC_GetValue(&hadc3);
+        HAL_ADC_Stop(&hadc3);
+
+        osMessageQueuePut(adcVoltageQueueHandle, &ADC_val_voltage, 0, 0);
+
+        osDelay(200);
+    }
+  /* USER CODE END StartAdcVoltageTask */
 }
 
 /* MPU Configuration */

@@ -52,7 +52,6 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN EFP */
 
