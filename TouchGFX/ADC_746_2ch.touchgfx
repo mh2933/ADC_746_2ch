@@ -79,7 +79,7 @@
           {
             "Type": "TextProgress",
             "Name": "textProgress1",
-            "X": 273,
+            "X": 279,
             "Y": 73,
             "Width": 150,
             "Height": 150,
@@ -101,8 +101,8 @@
           {
             "Type": "TextArea",
             "Name": "textArea4",
-            "X": 265,
-            "Y": 13,
+            "X": 271,
+            "Y": 12,
             "Width": 167,
             "Height": 24,
             "TextId": "__SingleUse_WO7L",
@@ -112,7 +112,7 @@
           {
             "Type": "CircleProgress",
             "Name": "circleProgress1",
-            "X": 253,
+            "X": 259,
             "Y": 53,
             "Width": 190,
             "Height": 190,

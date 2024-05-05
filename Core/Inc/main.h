@@ -52,14 +52,15 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN EFP */
 
-extern float mAh;
+
 
 uint8_t getRTCSeconds();
 
-//uint8_t real_second;
+
 
 /* USER CODE END EFP */
 

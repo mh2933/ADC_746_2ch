@@ -47,7 +47,7 @@ Screen1ViewBase::Screen1ViewBase()
     textArea3.setTypedText(touchgfx::TypedText(T___SINGLEUSE_D6U5));
     add(textArea3);
 
-    textProgress1.setXY(273, 73);
+    textProgress1.setXY(279, 73);
     textProgress1.setProgressIndicatorPosition(10, 60, 130, 30);
     textProgress1.setRange(0, 100);
     textProgress1.setColor(touchgfx::Color::getColorFromRGB(240, 187, 72));
@@ -56,13 +56,13 @@ Screen1ViewBase::Screen1ViewBase()
     textProgress1.setValue(60);
     add(textProgress1);
 
-    textArea4.setXY(265, 13);
+    textArea4.setXY(271, 12);
     textArea4.setColor(touchgfx::Color::getColorFromRGB(0, 0, 0));
     textArea4.setLinespacing(0);
     textArea4.setTypedText(touchgfx::TypedText(T___SINGLEUSE_WO7L));
     add(textArea4);
 
-    circleProgress1.setXY(253, 53);
+    circleProgress1.setXY(259, 53);
     circleProgress1.setProgressIndicatorPosition(0, 0, 190, 190);
     circleProgress1.setRange(0, 100);
     circleProgress1.setCenter(95, 95);

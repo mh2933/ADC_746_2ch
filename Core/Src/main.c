@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -109,6 +110,13 @@ const osThreadAttr_t videoTask_attributes = {
 };
 /* USER CODE BEGIN PV */
 
+osThreadId_t secondTaskHandle;
+const osThreadAttr_t secondTask_attributes = {
+  .name = "secondTask",
+  .stack_size = 1000 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+
 #ifdef __GNUC__
   #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
@@ -141,7 +149,10 @@ void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 extern void videoTaskFunc(void *argument);
 
+
 /* USER CODE BEGIN PFP */
+void secondTask(void *argument);
+
 #define DMA_BUFFER_SIZE 2
 uint32_t dma_buffer[DMA_BUFFER_SIZE];
 
@@ -167,7 +178,7 @@ float mAh;
 //FILE I/O variables
 FRESULT res;									/* FastFs function common result code */
 uint32_t byteswritten, bytesread;				/* File write/read counts */
-uint8_t wtext[] = "Hello from mathias :), SDIO from RTOS";  /* File write buffer */
+uint8_t wtext[]= "testtext";  			    /* File write buffer */
 uint8_t rtext[100];								/* File read buffer */
 
 
@@ -281,6 +292,9 @@ int main(void)
   videoTaskHandle = osThreadNew(videoTaskFunc, NULL, &videoTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
+
+  //secondTaskHandle = osThreadNew(secondTask, NULL, &secondTask_attributes);
+
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -984,6 +998,23 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+//extern xQueueHandle messageQ;
+unsigned int val = 0;
+
+//void StartDefaultTask(void * argument)
+//{
+//
+//  /* Infinite loop */
+//  for(;;)
+//  {
+//	  xQueueGenericSend(messageQ, &val, 0, xCopyPosition);
+//	  val++;
+//
+//    osDelay(1);
+//  }
+//  /* USER CODE END 5 */
+//}
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -995,6 +1026,9 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void * argument)
 {
+
+  char* wtext = (char*)argument;
+
   /* init code for FATFS */
   MX_FATFS_Init();
 
@@ -1012,7 +1046,7 @@ void StartDefaultTask(void * argument)
 	{
 		printf("Opened Write file successfully\r\n");
 		//Write data to text file
-		res = f_write(&SDFile, wtext, strlen((char *)wtext), (void *)&byteswritten);
+		res = f_write(&SDFile, wtext, strlen((char *)wtext), (void*)&byteswritten);
 		if((byteswritten == 0) || (res != FR_OK))
 		{
 			printf("Failed to write file!\r\n");
@@ -1041,11 +1075,13 @@ void StartDefaultTask(void * argument)
 		f_close(&SDFile);
 
 
+
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
+  return;
   /* USER CODE END 5 */
 }
 

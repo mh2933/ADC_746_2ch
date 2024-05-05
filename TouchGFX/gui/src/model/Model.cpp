@@ -3,35 +3,122 @@
 #include <cstdio>
 #include <chrono>
 #include <cstdint>
+#include <iostream>
+#include <string>
+
 #include "stm32f7xx_hal.h"
 
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "task.h"
 
-
+using namespace std;
 
 #ifndef SIMULATOR
 #include "main.h"
-
-
+//#include "ff.h"
+#include "fatfs.h"
+#include "string.h"
+#include "stm32f7xx_hal.h"
 
 extern "C"
 {
+    uint32_t HAL_GetTick(void);
+    void StartDefaultTask(void * argument);
 
     extern ADC_HandleTypeDef hadc3;
     extern RTC_HandleTypeDef hrtc;
     extern RTC_TimeTypeDef RTC_Time;
     extern RTC_DateTypeDef RTC_Date;
     extern RTC_TimeTypeDef sTime;
+
+    xQueueHandle messageQ;
+
+    // Function to start the default task with the mAh value
+
+
+//    extern SDRAM_HandleTypeDef hsdram1;
+//    extern SD_HandleTypeDef hsd1;
+//    extern DMA_HandleTypeDef hdma_sdmmc1_rx;
+//    extern DMA_HandleTypeDef hdma_sdmmc1_tx;
+
+    //SD Card variables FATFS
+    //uint8_t retSD;    /* Return value for SD */
+//    extern char SDPath[4];   /* SD logical drive path */
+//    extern FATFS SDFatFS;    /* File system object for SD logical drive */
+//    extern FIL SDFile;       /* File object for SD */
 //    extern float mAh;
-//    extern uint8_t real_second;
+//
+//
+//    //FILE I/O variables
+//    extern FRESULT res;													/* FastFs function common result code */
+//    extern uint32_t byteswritten, bytesread;							/* File write/read counts */
+//    uint8_t wtext[] = "Hello from mathias :), SDIO from RTOS";  /* File write buffer */
+//    extern uint8_t rtext[100];											/* File read buffer */
 
-
-
-//    extern "C" float call_C_calcMilliAh(C *p)
+    /* USER CODE END Header_StartDefaultTask */
+//    void StartDefaultTask(void * argument)
 //    {
-//    	return p->calcMilliAh();
+//      /* init code for FATFS */
+//      MX_FATFS_Init();
+//
+//      /* USER CODE BEGIN 5 */
+//    	//1. Mount - 0
+//    	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+//
+//    	//TEST Write operation
+//    	//2. Open file for Writing
+//    	if(f_open(&SDFile, "F7FILE1.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
+//    	{
+//    		printf("Failed to open Write file\r\n");
+//    	}
+//    	else
+//    	{
+//    		printf("Opened Write file successfully\r\n");
+//
+//    		// Write mAh value to the file
+////    		        char wtext[100];
+////    		        snprintf(wtext, sizeof(wtext), "mAh: %.2f", mAh);
+//
+//    		//Write data to text file
+//    		res = f_write(&SDFile, wtext, strlen((char *)wtext), (UINT*)&byteswritten);
+//    		if((byteswritten == 0) || (res != FR_OK))
+//    		{
+//    			printf("Failed to write file!\r\n");
+//    		}
+//    		else
+//    		{
+//    			printf("File written successfully\r\n");
+//    			printf("Write Content: %s\r\n", wtext);
+//    		}
+//    		f_close(&SDFile);
+//    	}
+//
+//    	//Test read file
+//    	f_open(&SDFile, "F7FILE1.TXT",  FA_READ);
+//    		memset(rtext,0,sizeof(rtext));
+//    		res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesread);
+//    		if((bytesread == 0) || (res != FR_OK))
+//    		{
+//    			printf("Failed to read file!\r\n");
+//    		}
+//    		else
+//    		{
+//    			printf("File read successfully\r\n");
+//    			printf("File content: %s\r\n", (char *)rtext);
+//    		}
+//    		f_close(&SDFile);
+//
+//
+//      /* Infinite loop */
+//      for(;;)
+//      {
+//        osDelay(1);
+//      }
+//      /* USER CODE END 5 */
 //    }
-//    }
-
+//
+//
     float map(float x, float in_min, float in_max, float out_min, float out_max)
     {
       return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
@@ -39,9 +126,9 @@ extern "C"
 }
 #endif
 
-Model::Model() : modelListener(0), Voltage (10.5), Current (6.5), mAh (10000), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0), previous_second(60)
+Model::Model() : modelListener(0), Voltage (10.5), Current (6.5), mAh (8800), tickCounter (100), milli_seconds (0), seconds (0.0), tickCounterNow (100), count_milli_seconds(0), previous_second(60)
 {
-
+	messageQ = xQueueGenericCreate(1, 1, 0);
 }
 
 float Model::adcReadVoltage()
@@ -157,7 +244,7 @@ float Model::calcMilliAh()
 
 			// Ensure mAh does not go below 0 and above 10000
 			if (mAh < 0) mAh = 0;
-			if (mAh > 10000) mAh = 10000;
+			if (mAh > 8800) mAh = 8800;
 
 			if ((Current > -0.15) & (Current < 0.15))
 			{
@@ -169,21 +256,48 @@ float Model::calcMilliAh()
     return mAh;
 }
 
+ //Function to format the mAh value as a string
+void formatMahValue(float mahValue, char* buffer, size_t bufferSize) {
+    snprintf(buffer, bufferSize, "%.2f mAh", mahValue);
+    return;
+}
+
 void Model::tick()
 {
 
 #ifndef SIMULATOR
 
+    uint32_t currentMilliseconds = HAL_GetTick();
+    printf("currentMilleSeconds %ld\n", currentMilliseconds);
+    cout << "Hello" << endl;
+
+
+//	if (xQueueReceive(messageQ, &counter, 0) == pdTRUE)
+//	{
+//
+//	}
+	float mahValue = 0;
+
     Voltage = adcReadVoltage();
     if (Voltage < 0.2) Voltage = 0;
 
     mAh = calcMilliAh();
+    mahValue = mAh;
+    char wtext[15];  // Buffer to hold the formatted mAh value
+    formatMahValue(mahValue, wtext, sizeof(wtext));
+
+    // Pass the address of wtext to StartDefaultTask
+    StartDefaultTask(static_cast<void*>(wtext));
+
 
     // tickCounter is related to percentage bargraph on the UI
-    tickCounter = map(mAh, 10005, 0, 100, 0);
+    tickCounter = map(mAh, 8805, 0, 100, 0);
+
 
     //printf("real_second %d\n", real_second);
     //printf("mAh %f\n", mAh);
+
+
 
 #endif
 
