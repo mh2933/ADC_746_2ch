@@ -22,6 +22,10 @@ using namespace std;
 #include "stm32f7xx_hal.h"
 #include <cmsis_os2.h>
 
+
+
+
+
 extern "C"
 {
     /* milliseconds */
@@ -36,97 +40,7 @@ extern "C"
 
     extern osMessageQueueId_t adcCurrentQueueHandle;
     extern osMessageQueueId_t adcVoltageQueueHandle;
-
-    // Function to start the default task with the mAh value
-
-
-//    extern SDRAM_HandleTypeDef hsdram1;
-//    extern SD_HandleTypeDef hsd1;
-//    extern DMA_HandleTypeDef hdma_sdmmc1_rx;
-//    extern DMA_HandleTypeDef hdma_sdmmc1_tx;
-
-    //SD Card variables FATFS
-    //uint8_t retSD;    /* Return value for SD */
-//    extern char SDPath[4];   /* SD logical drive path */
-//    extern FATFS SDFatFS;    /* File system object for SD logical drive */
-//    extern FIL SDFile;       /* File object for SD */
-//    extern float mAh;
-//
-//
-//    //FILE I/O variables
-//    extern FRESULT res;													/* FastFs function common result code */
-//    extern uint32_t byteswritten, bytesread;							/* File write/read counts */
-//    uint8_t wtext[] = "Hello from mathias :), SDIO from RTOS";  /* File write buffer */
-//    extern uint8_t rtext[100];											/* File read buffer */
-
-    /* USER CODE END Header_StartDefaultTask */
-//    void StartDefaultTask(void * argument)
-//    {
-//      /* init code for FATFS */
-//      MX_FATFS_Init();
-//
-//      /* USER CODE BEGIN 5 */
-//    	//1. Mount - 0
-//    	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
-//
-//    	//TEST Write operation
-//    	//2. Open file for Writing
-//    	if(f_open(&SDFile, "F7FILE1.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
-//    	{
-//    		printf("Failed to open Write file\r\n");
-//    	}
-//    	else
-//    	{
-//    		printf("Opened Write file successfully\r\n");
-//
-//    		// Write mAh value to the file
-////    		        char wtext[100];
-////    		        snprintf(wtext, sizeof(wtext), "mAh: %.2f", mAh);
-//
-//    		//Write data to text file
-//    		res = f_write(&SDFile, wtext, strlen((char *)wtext), (UINT*)&byteswritten);
-//    		if((byteswritten == 0) || (res != FR_OK))
-//    		{
-//    			printf("Failed to write file!\r\n");
-//    		}
-//    		else
-//    		{
-//    			printf("File written successfully\r\n");
-//    			printf("Write Content: %s\r\n", wtext);
-//    		}
-//    		f_close(&SDFile);
-//    	}
-//
-//    	//Test read file
-//    	f_open(&SDFile, "F7FILE1.TXT",  FA_READ);
-//    		memset(rtext,0,sizeof(rtext));
-//    		res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesread);
-//    		if((bytesread == 0) || (res != FR_OK))
-//    		{
-//    			printf("Failed to read file!\r\n");
-//    		}
-//    		else
-//    		{
-//    			printf("File read successfully\r\n");
-//    			printf("File content: %s\r\n", (char *)rtext);
-//    		}
-//    		f_close(&SDFile);
-//
-//
-//      /* Infinite loop */
-//      for(;;)
-//      {
-//        osDelay(1);
-//      }
-//      /* USER CODE END 5 */
-//    }
-//
-//
-//    float map(float x, float in_min, float in_max, float out_min, float out_max)
-//    {
-//      return (x - in_min) * (out_max - out_min + 1) / (in_max - in_min + 1) + out_min;
-//    }
-
+    extern osMessageQueueId_t sdQueueHandle;
 
 }
 #endif
@@ -160,7 +74,7 @@ float Model::calcMilliAh()
 
 	    	seconds = 1.0;
 
-			//Current = adcReadCurrent();
+			// Current = adcReadCurrent();
 
 			// Calculate mAh consumed per second
 			float mAhConsumedPerSecond = (Current * seconds) / 3.6;
@@ -187,8 +101,74 @@ float Model::calcMilliAh()
 
  //Function to format the mAh value as a string and snprintf saves it to the buffer
 void formatMahValue(float mahValue, char* buffer, size_t bufferSize) {
-    snprintf(buffer, bufferSize, "%.2f mAh", mahValue);
+    // Clear the buffer
+    memset(buffer, 0, bufferSize);
+
+    printf("inside formatMahValue: %.2f\n", mahValue);
+
+	snprintf(buffer, bufferSize, "%.2f mAh", mahValue);
     return;
+}
+
+void Model::writeToSDCard(char* data) {
+
+	printf("inside writeToSDCard function\n");
+	printf("Data to write: %s\n", data);
+
+	    // Format the mAh value as a string
+	    //char mAhString[20]; // Buffer to hold the formatted mAh value
+	    //formatMahValue(mAh, mAhString, sizeof(mAhString));
+	    //char* localData = this->mAhString;
+
+
+    SD_Operation_t operation;
+
+    printf("sizeof operation.data %u\n ",sizeof(operation.data));
+    printf("sizeof data %u\n ",sizeof(data));
+
+    // Calculate the size of the buffer
+    size_t bufferSize = sizeof(operation.data);
+    printf("buffersize %u\n", bufferSize);
+
+    // Calculate the target size for the truncated data
+    // You can adjust this value to leave more headroom in the buffer
+    size_t targetSize = bufferSize / 4; // For example, truncate to half the buffer size
+
+    printf("targetSize %u\n", targetSize);
+
+    // Get the length of the input data
+    //size_t dataLength = strlen(data);
+    //printf("Length of data: %u\n", dataLength);
+
+    // If the input data is larger than the target size, truncate it
+    /*if (dataLength >= targetSize) {
+        // Truncate the data to fit within the target size
+        dataLength = targetSize - 1; // Leave space for null terminator
+        printf("trunkating");
+    }*/
+    operation.data = data;
+    //Copy the truncated data into the buffer
+    //strlcpy(operation.data, data, dataLength + 1); // Include space for null terminator
+    //operation.data[dataLength] = '\0'; // Null-terminate the string
+
+    operation.command = SD_WRITE;
+    //strncpy(operation.data, data, dataLength); // Ensure null-termination
+    printf("inside writeToSDCard function after strncpy \n\n");
+
+    operation.data[sizeof(operation.data) - 1] = '\0'; // Force null-termination
+    printf("inside writeToSDCard function after operation.data \n\n");
+
+    osMessageQueuePut(sdQueueHandle, &operation, 0, osWaitForever);
+    printf("inside writeToSDCard function after osMessageQueuePut \n\n");
+    printf("Data: %s \n", operation.data);
+    return;
+}
+
+void Model::readFromSDCard() {
+	SD_Operation_t operation;
+    operation.command = SD_Operation_t::SD_READ;
+    // Assuming operation.data is already prepared for reading
+    osMessageQueuePut(sdQueueHandle, &operation, 0, 0);
 }
 
 void Model::tick()
@@ -224,7 +204,7 @@ void Model::tick()
 		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
 
 			modelListener->setADC2current(Current);
-			printf("inside model.cpp %d\n", ADC_Value);
+			printf("inside model.cpp currentqueue %d\n", ADC_Value);
 		}
 	}
 
@@ -248,7 +228,8 @@ void Model::tick()
             Voltage = mapFloat(adc_average, 0, 4095, 0.0, 55.59);
 
 			modelListener->setADC1voltage(Voltage);
-			printf("inside model.cpp %d\n", ADC_Value);
+
+			printf("inside model.cpp Voltage queue %d\n", ADC_Value);
 		}
 	}
 
@@ -259,12 +240,36 @@ void Model::tick()
     if (Voltage < 0.2) Voltage = 0;
 
     mAh = calcMilliAh();
-//    float mahValue = mAh;
-//    char wtext[15];  // Buffer to hold the formatted mAh value
-//    formatMahValue(mahValue, wtext, sizeof(wtext));
-//
-//    // Pass the address of wtext to StartDefaultTask
-//    StartDefaultTask(static_cast<void*>(wtext));
+
+
+
+    if (real_second - second >= 10)
+    {
+    	printf("last_second %d\n", last_second);
+    	printf("second %d\n", second);
+    	second = real_second;
+    		if (second >= 50)
+    		{
+    			second = 0;
+    		}
+		// Format the mAh value as a string
+		 // Buffer to hold the formatted mAh value
+		formatMahValue(mAh, mAhString, sizeof(mAhString));
+
+		printf("before writeToSDCard call\n");
+		writeToSDCard(mAhString);
+
+//		void result = writeToSDCard(mAhString);
+//		if (result == 0) {
+//			// Log error or handle failure
+//			printf("error result < 0\n");
+//		}
+    	printf("real_second %d\n", real_second);
+        printf("second %d\n", second);
+        printf("last_second %d\n", last_second);
+
+
+    }
 
 
     // tickCounter is related to percentage bargraph on the UI

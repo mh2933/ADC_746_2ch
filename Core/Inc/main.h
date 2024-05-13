@@ -38,10 +38,19 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+typedef struct {
+    enum {
+        SD_WRITE,
+        SD_READ
+    } command;
+    char* data; // For SD_WRITE, this could be the data to write. For SD_READ, this could be a buffer to read into.
+} SD_Operation_t;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+
 
 /* USER CODE END EC */
 
