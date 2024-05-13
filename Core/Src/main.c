@@ -32,10 +32,13 @@
 #include <string.h>
 
 
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+
 
 /* USER CODE END PTD */
 
@@ -89,12 +92,12 @@ UART_HandleTypeDef huart1;
 SDRAM_HandleTypeDef hsdram1;
 
 /* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
+//osThreadId_t defaultTaskHandle;
+//const osThreadAttr_t defaultTask_attributes = {
+//  .name = "defaultTask",
+//  .stack_size = 128 * 4,
+//  .priority = (osPriority_t) osPriorityNormal,
+//};
 /* Definitions for TouchGFXTask */
 osThreadId_t TouchGFXTaskHandle;
 const osThreadAttr_t TouchGFXTask_attributes = {
@@ -123,6 +126,13 @@ const osThreadAttr_t adcVoltageTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for sdTask */
+osThreadId_t sdTaskHandle;
+const osThreadAttr_t sdTask_attributes = {
+  .name = "sdTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 /* Definitions for adcCurrentQueue */
 osMessageQueueId_t adcCurrentQueueHandle;
 const osMessageQueueAttr_t adcCurrentQueue_attributes = {
@@ -133,7 +143,14 @@ osMessageQueueId_t adcVoltageQueueHandle;
 const osMessageQueueAttr_t adcVoltageQueue_attributes = {
   .name = "adcVoltageQueue"
 };
+/* Definitions for sdQueue */
+osMessageQueueId_t sdQueueHandle;
+const osMessageQueueAttr_t sdQueue_attributes = {
+  .name = "sdQueue"
+};
 /* USER CODE BEGIN PV */
+
+
 
 osThreadId_t secondTaskHandle;
 const osThreadAttr_t secondTask_attributes = {
@@ -170,11 +187,12 @@ static void MX_USART1_UART_Init(void);
 static void MX_RTC_Init(void);
 static void MX_SDMMC1_SD_Init(void);
 static void MX_CRC_Init(void);
-void StartDefaultTask(void *argument);
+//void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 extern void videoTaskFunc(void *argument);
 void StartAdcCurrentTask(void *argument);
 void StartAdcVoltageTask(void *argument);
+void StartSDTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 void secondTask(void *argument);
@@ -203,16 +221,16 @@ int map(int x, int in_min, int in_max, int out_min, int out_max)
 
 //SD Card variables FATFS
 //uint8_t retSD;    /* Return value for SD */
-extern char SDPath[4];   /* SD logical drive path */
-extern FATFS SDFatFS;    /* File system object for SD logical drive */
-extern FIL SDFile;       /* File object for SD */
+//char SDPath[4];   /* SD logical drive path */
+//FATFS SDFatFS;    /* File system object for SD logical drive */
+//FIL SDFile;       /* File object for SD */
 float mAh;
 
 
 //FILE I/O variables
 FRESULT res;									/* FastFs function common result code */
 uint32_t byteswritten, bytesread;				/* File write/read counts */
-uint8_t wtext[]= "testtext";  			    /* File write buffer */
+uint8_t wtext[]= "testtext";  			        /* File write buffer */
 uint8_t rtext[100];								/* File read buffer */
 
 
@@ -318,13 +336,16 @@ int main(void)
   /* creation of adcVoltageQueue */
   adcVoltageQueueHandle = osMessageQueueNew (10, sizeof(uint16_t), &adcVoltageQueue_attributes);
 
+  /* creation of sdQueue */
+  sdQueueHandle = osMessageQueueNew (16, sizeof(uint32_t), &sdQueue_attributes);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+//  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of TouchGFXTask */
   TouchGFXTaskHandle = osThreadNew(TouchGFX_Task, NULL, &TouchGFXTask_attributes);
@@ -337,6 +358,9 @@ int main(void)
 
   /* creation of adcVoltageTask */
   adcVoltageTaskHandle = osThreadNew(StartAdcVoltageTask, NULL, &adcVoltageTask_attributes);
+
+  /* creation of sdTask */
+  sdTaskHandle = osThreadNew(StartSDTask, NULL, &sdTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 
@@ -355,7 +379,6 @@ int main(void)
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  printf("hello1 outside while in main.c");
 
   while (1)
   {
@@ -363,7 +386,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  printf("hello while in main.c");
+
   }
   /* USER CODE END 3 */
 }
@@ -467,7 +490,7 @@ static void MX_ADC3_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -744,7 +767,7 @@ static void MX_RTC_Init(void)
   */
   sTime.Hours = 23;
   sTime.Minutes = 59;
-  sTime.Seconds = 45;
+  sTime.Seconds = 1;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
   if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
@@ -1074,60 +1097,18 @@ unsigned int val = 0;
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
-  /* USER CODE BEGIN 5 */
-	//1. Mount - 0
-	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
-
-	//TEST Write operation
-	//2. Open file for Writing
-	if(f_open(&SDFile, "F7FILE1.TXT", FA_CREATE_ALWAYS | FA_WRITE) != FR_OK)
-	{
-		printf("Failed to open Write file\r\n");
-	}
-	else
-	{
-		printf("Opened Write file successfully\r\n");
-		//Write data to text file
-		res = f_write(&SDFile, wtext, strlen((char *)wtext), (void*)&byteswritten);
-		if((byteswritten == 0) || (res != FR_OK))
-		{
-			printf("Failed to write file!\r\n");
-		}
-		else
-		{
-			printf("File written successfully\r\n");
-			printf("Write Content: %s\r\n", wtext);
-		}
-		f_close(&SDFile);
-	}
-
-	//Test read file
-	f_open(&SDFile, "F7FILE1.TXT",  FA_READ);
-		memset(rtext,0,sizeof(rtext));
-		res = f_read(&SDFile, rtext, sizeof(rtext), (UINT*)&bytesread);
-		if((bytesread == 0) || (res != FR_OK))
-		{
-			printf("Failed to read file!\r\n");
-		}
-		else
-		{
-			printf("File read successfully\r\n");
-			printf("File content: %s\r\n", (char *)rtext);
-		}
-		f_close(&SDFile);
-
-
-
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  return;
-  /* USER CODE END 5 */
-}
+//void StartDefaultTask(void *argument)
+//{
+//  /* USER CODE BEGIN 5 */
+//
+//
+//  /* Infinite loop */
+//  for(;;)
+//  {
+//    osDelay(1);
+//  }
+//  /* USER CODE END 5 */
+//}
 
 /* USER CODE BEGIN Header_StartAdcCurrentTask */
 /**
@@ -1146,7 +1127,7 @@ void StartAdcCurrentTask(void *argument)
 	  {
 	    sConfig.Channel = ADC_CHANNEL_8;
 	    sConfig.Rank = ADC_REGULAR_RANK_1;
-	    sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+	    sConfig.SamplingTime = ADC_SAMPLETIME_112CYCLES;
 	    if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
 	    {
 	        Error_Handler();
@@ -1156,7 +1137,7 @@ void StartAdcCurrentTask(void *argument)
 		HAL_ADC_PollForConversion(&hadc3, 10);
 		int ADC_val_current = HAL_ADC_GetValue(&hadc3);
 		HAL_ADC_Stop(&hadc3);
-		printf("adc inside main.c %d\n", ADC_val_current);
+		printf("adc inside main.c CurrentTask %d\n", ADC_val_current);
 
 		osMessageQueuePut(adcCurrentQueueHandle, &ADC_val_current, 0, 0);
 
@@ -1182,7 +1163,7 @@ void StartAdcVoltageTask(void *argument)
     {
         sConfig.Channel = ADC_CHANNEL_0;
         sConfig.Rank = ADC_REGULAR_RANK_1;
-        sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+        sConfig.SamplingTime = ADC_SAMPLETIME_112CYCLES;
         if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
         {
             Error_Handler();
@@ -1193,12 +1174,81 @@ void StartAdcVoltageTask(void *argument)
         int ADC_val_voltage = HAL_ADC_GetValue(&hadc3);
         HAL_ADC_Stop(&hadc3);
 
+        printf("adc inside main.c VoltageTask %d\n", ADC_val_voltage);
+
         osMessageQueuePut(adcVoltageQueueHandle, &ADC_val_voltage, 0, 0);
 
         osDelay(200);
     }
   /* USER CODE END StartAdcVoltageTask */
 }
+
+/* USER CODE BEGIN Header_StartSDTask */
+/**
+* @brief Function implementing the sdTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartSDTask */
+void StartSDTask(void *argument)
+{
+  /* USER CODE BEGIN StartSDTask */
+
+	    for (;;) {
+	    	printf("Hello SDTask \n"); // Debug print
+	    	SD_Operation_t operation;
+	    	FATFS SDFatFS;
+	        FIL SDFile;
+	        FRESULT res;
+	    	UINT byteswritten, bytesread;
+	    	f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+	    	//	    char wtext[20]; // Buffer to hold the formatted mAh value
+	    	//	    char rtext[20]; // Buffer to read from the SD card
+
+	    		    // Mount the SD card
+	        printf("loop \n"); // Debug print
+	        if (osMessageQueueGet(sdQueueHandle, &operation, 0, osWaitForever) == osOK) {
+	        	printf("Received SD operation: %d\n", operation.command); // Debug print
+	            switch (operation.command) {
+	                case SD_WRITE:
+	                    // Open file for writing
+	                    if (f_open(&SDFile, "F7FILE1.TXT", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK) {
+	                        // Write data to text file
+	                        res = f_write(&SDFile, operation.data, strlen(operation.data), &byteswritten);
+	                        if (res != FR_OK || byteswritten == 0) {
+	                            printf("Failed to write file!\r\n");
+	                        } else {
+	                            printf("File written successfully\r\n");
+	                            printf("Write Content: %s\r\n", operation.data);
+	                        }
+	                        f_close(&SDFile);
+	                    } else {
+	                        printf("Failed to open Write file\r\n");
+	                    }
+	                    break;
+	                case SD_READ:
+	                    // Open file for reading
+	                    if (f_open(&SDFile, "F7FILE1.TXT", FA_READ) == FR_OK) {
+	                        memset(rtext, 0, sizeof(rtext));
+	                        res = f_read(&SDFile, rtext, sizeof(rtext), &bytesread);
+	                        if (res != FR_OK || bytesread == 0) {
+	                            printf("Failed to read file!\r\n");
+	                        } else {
+	                            printf("File read successfully\r\n");
+	                            printf("File content: %s\r\n", rtext);
+	                        }
+	                        f_close(&SDFile);
+	                    } else {
+	                        printf("Failed to open Read file\r\n");
+	                    }
+	                    break;
+	                default:
+	                	printf("Nothing to do");
+	            }
+	        }
+	    }
+	}
+  /* USER CODE END StartSDTask */
 
 /* MPU Configuration */
 

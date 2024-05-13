@@ -1,4 +1,6 @@
 #include <gui/screen1_screen/Screen1View.hpp>
+#include <cstdio>
+#include "stm32f7xx_hal.h"
 
 Screen1View::Screen1View()
 {
@@ -23,7 +25,10 @@ void Screen1View::setADC1voltage (float val)
 
 void Screen1View::setADC2current (float val)
 {
+	 uint32_t millisec = HAL_GetTick();
+
 	 Unicode::snprintfFloat(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%.2f", val);
+	 printf("debuggtext from view.cpp %ld\n", millisec);
 	 textArea2current.invalidate();
 }
 
