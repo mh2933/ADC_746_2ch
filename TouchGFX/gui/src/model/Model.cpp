@@ -203,7 +203,7 @@ void Model::tick()
 
 		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
 
-		    if (Current > -1 or Current < 1) Current = 0;
+		    if (Current > -0.5 or Current < 0.5) Current = 0;
 
 			modelListener->setADC2current(Current);
 			printf("inside model.cpp currentqueue %d\n", ADC_Value);
@@ -275,7 +275,7 @@ void Model::tick()
 
 
     // tickCounter is related to percentage bargraph on the UI
-    tickCounter = mapFloat(mAh, 8805, 0, 100, 0);
+    tickCounter = mapFloat(mAh, 8800, 0, 100, 0);
 
 
 

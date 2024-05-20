@@ -1178,7 +1178,7 @@ void StartAdcVoltageTask(void *argument)
 
         osMessageQueuePut(adcVoltageQueueHandle, &ADC_val_voltage, 0, 0);
 
-        osDelay(200);
+        osDelay(1000);
     }
   /* USER CODE END StartAdcVoltageTask */
 }
