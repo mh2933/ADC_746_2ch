@@ -151,7 +151,7 @@ void Model::writeToSDCard(char* data) {
     //strlcpy(operation.data, data, dataLength + 1); // Include space for null terminator
     //operation.data[dataLength] = '\0'; // Null-terminate the string
 
-    operation.command = SD_WRITE;
+    operation.command = SD_Operation_t::SD_WRITE;
     //strncpy(operation.data, data, dataLength); // Ensure null-termination
     printf("inside writeToSDCard function after strncpy \n\n");
 
@@ -195,13 +195,15 @@ void Model::tick()
 			float v_per_ampere = 0.0239;
 			float Vcc = 3.320;
 			//printf("adc2_average: %f\n\n", adc2_average);
-			float midpoint_val = 1.5425;
+			float midpoint_val = 1.641;
 
 			float calculated_volt = adc2_average * (Vcc / 4095.0);
 			//printf("calculated_volt: %.5f\n\n", calculated_volt);
 			float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
 
 		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
+
+		    if (Current > -1 or Current < 1) Current = 0;
 
 			modelListener->setADC2current(Current);
 			printf("inside model.cpp currentqueue %d\n", ADC_Value);
@@ -225,7 +227,7 @@ void Model::tick()
 
 			adc_average = adc_sum_1 / adc_count;
 
-            Voltage = mapFloat(adc_average, 0, 4095, 0.0, 55.59);
+            Voltage = mapFloat(adc_average, 0, 4095, 0.0, 45.0);
 
 			modelListener->setADC1voltage(Voltage);
 
@@ -243,33 +245,33 @@ void Model::tick()
 
 
 
-    if (real_second - second >= 10)
-    {
-    	printf("last_second %d\n", last_second);
-    	printf("second %d\n", second);
-    	second = real_second;
-    		if (second >= 50)
-    		{
-    			second = 0;
-    		}
-		// Format the mAh value as a string
-		 // Buffer to hold the formatted mAh value
-		formatMahValue(mAh, mAhString, sizeof(mAhString));
-
-		printf("before writeToSDCard call\n");
-		writeToSDCard(mAhString);
-
-//		void result = writeToSDCard(mAhString);
-//		if (result == 0) {
-//			// Log error or handle failure
-//			printf("error result < 0\n");
-//		}
-    	printf("real_second %d\n", real_second);
-        printf("second %d\n", second);
-        printf("last_second %d\n", last_second);
-
-
-    }
+//    if (real_second - second >= 10)
+//    {
+//    	printf("last_second %d\n", last_second);
+//    	printf("second %d\n", second);
+//    	second = real_second;
+//    		if (second >= 50)
+//    		{
+//    			second = 0;
+//    		}
+//		// Format the mAh value as a string
+//		 // Buffer to hold the formatted mAh value
+//		formatMahValue(mAh, mAhString, sizeof(mAhString));
+//
+//		printf("before writeToSDCard call\n");
+//		writeToSDCard(mAhString);
+//
+////		void result = writeToSDCard(mAhString);
+////		if (result == 0) {
+////			// Log error or handle failure
+////			printf("error result < 0\n");
+////		}
+//    	printf("real_second %d\n", real_second);
+//        printf("second %d\n", second);
+//        printf("last_second %d\n", last_second);
+//
+//
+//    }
 
 
     // tickCounter is related to percentage bargraph on the UI

@@ -5,6 +5,6 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:68:7:float Mode
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:103:6:void formatMahValue(float, char*, size_t)	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:113:6:void Model::writeToSDCard(char*)	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:167:6:void Model::readFromSDCard()	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:174:6:void Model::tick()	9
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:287:1:cpp)	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:287:1:cpp)	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:174:6:void Model::tick()	10
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:289:1:cpp)	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:289:1:cpp)	1
