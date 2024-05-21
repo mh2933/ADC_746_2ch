@@ -8,6 +8,6 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:10:6:virtual void Screen1View::setupScreen()	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:20:6:virtual void Screen1View::setADC1voltage(float)	1
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:26:6:virtual void Screen1View::setADC2current(float)	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:35:6:virtual void Screen1View::setAh(float)	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:41:6:virtual void Screen1View::setTextProgress(int)	1
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:47:6:virtual void Screen1View::setCircleProgress(int)	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:33:6:virtual void Screen1View::setAh(float)	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:39:6:virtual void Screen1View::setTextProgress(int)	1
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/screen1_screen/Screen1View.cpp:45:6:virtual void Screen1View::setCircleProgress(int)	1

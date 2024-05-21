@@ -1141,7 +1141,7 @@ void StartAdcCurrentTask(void *argument)
 
 		osMessageQueuePut(adcCurrentQueueHandle, &ADC_val_current, 0, 0);
 
-		osDelay(200);
+		osDelay(10);
 	  }
   /* USER CODE END StartAdcCurrentTask */
 }
@@ -1174,7 +1174,6 @@ void StartAdcVoltageTask(void *argument)
         int ADC_val_voltage = HAL_ADC_GetValue(&hadc3);
         HAL_ADC_Stop(&hadc3);
 
-        printf("adc inside main.c VoltageTask %d\n", ADC_val_voltage);
 
         osMessageQueuePut(adcVoltageQueueHandle, &ADC_val_voltage, 0, 0);
 

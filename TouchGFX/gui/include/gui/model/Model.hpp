@@ -51,7 +51,8 @@ protected:
     int ADC_Value;
     uint8_t last_second = 0;
     uint8_t second = 0;
-    char mAhString[20];
+    //char mAhString[20];
+    uint32_t milliSec = 0;
 
 
 

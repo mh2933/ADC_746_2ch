@@ -6,5 +6,5 @@ C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:103:6:void form
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:113:6:void Model::writeToSDCard(char*)	16	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:167:6:void Model::readFromSDCard()	16	static
 C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:174:6:void Model::tick()	24	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:289:1:cpp)	0	static
-C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:289:1:cpp)	0	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:304:1:cpp)	0	static
+C:/TouchGFXProjects/ADC_746_2ch/TouchGFX/gui/src/model/Model.cpp:304:1:cpp)	0	static

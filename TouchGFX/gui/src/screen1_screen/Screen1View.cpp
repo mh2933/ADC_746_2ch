@@ -25,10 +25,8 @@ void Screen1View::setADC1voltage (float val)
 
 void Screen1View::setADC2current (float val)
 {
-	 uint32_t millisec = HAL_GetTick();
 
 	 Unicode::snprintfFloat(textArea2currentBuffer, TEXTAREA2CURRENT_SIZE, "%.1f", val);
-	 printf("debuggtext from view.cpp %ld\n", millisec);
 	 textArea2current.invalidate();
 }
 

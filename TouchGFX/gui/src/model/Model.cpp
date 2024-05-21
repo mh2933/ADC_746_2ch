@@ -188,6 +188,7 @@ void Model::tick()
 		        float ADC_Value_float = static_cast<float>(ADC_Value);
 				adc_sum_2 += ADC_Value_float;
 		    	adc_count++;
+		    	//printf("adc_sum_2 %f\n", adc_sum_2);
 			}
 
 			adc2_average = adc_sum_2 / adc_count;
@@ -203,10 +204,24 @@ void Model::tick()
 
 		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
 
-		    if (Current > -0.5 or Current < 0.5) Current = 0;
+		    if (Current > -0.5 and Current < 0.5) Current = 0;
 
+		    //modelListener->setADC2current(Current);
+
+		    uint32_t milliTick = HAL_GetTick();
+
+            if (milliTick - milliSec >= 500)
+            {
 			modelListener->setADC2current(Current);
 			printf("inside model.cpp currentqueue %d\n", ADC_Value);
+			milliSec = milliTick;
+			printf("milliTick %ld", milliTick);
+
+//				if (milliSec >= 59)
+//				{
+//					second = 0;
+//				}
+            }
 		}
 	}
 
@@ -231,7 +246,7 @@ void Model::tick()
 
 			modelListener->setADC1voltage(Voltage);
 
-			printf("inside model.cpp Voltage queue %d\n", ADC_Value);
+			//printf("inside model.cpp Voltage queue %d\n", ADC_Value);
 		}
 	}
 
