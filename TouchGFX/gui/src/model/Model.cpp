@@ -193,16 +193,17 @@ void Model::tick()
 
 			adc2_average = adc_sum_2 / adc_count;
 
-			float v_per_ampere = 0.0239;
+			float v_per_ampere = 0.0291;
 			float Vcc = 3.320;
 			//printf("adc2_average: %f\n\n", adc2_average);
 			float midpoint_val = 1.641;
 
 			float calculated_volt = adc2_average * (Vcc / 4095.0);
-			//printf("calculated_volt: %.5f\n\n", calculated_volt);
+			printf("calculated_volt: %.5f\n\n", calculated_volt);
 			float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
 
-		    Current = mapFloat(calculated_voltage_to_current, -100.0, 100.0, -100.0, 100.0);
+		    Current = mapFloat(calculated_voltage_to_current, -50.0, 50.0, -50.0, 50.0);
+
 
 		    if (Current > -0.5 and Current < 0.5) Current = 0;
 
