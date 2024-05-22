@@ -202,7 +202,8 @@ void Model::tick()
 			printf("calculated_volt: %.5f\n\n", calculated_volt);
 			float calculated_voltage_to_current = (calculated_volt - midpoint_val) / v_per_ampere;
 
-		    Current = mapFloat(calculated_voltage_to_current, -50.0, 50.0, -50.0, 50.0);
+			printf("calculated_voltage_to_current %f \n", calculated_voltage_to_current);
+		    Current = mapFloat(calculated_voltage_to_current, -56.4, 57.7, -50.0, 50.0);
 
 
 		    if (Current > -0.5 and Current < 0.5) Current = 0;
@@ -211,7 +212,7 @@ void Model::tick()
 
 		    uint32_t milliTick = HAL_GetTick();
 
-            if (milliTick - milliSec >= 500)
+            if (milliTick - milliSec >= 350)
             {
 			modelListener->setADC2current(Current);
 			printf("inside model.cpp currentqueue %d\n", ADC_Value);
